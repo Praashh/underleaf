@@ -1,0 +1,302 @@
+/* ========================================
+   OVERLEAF EDITOR PAGE STYLES
+   ======================================== */
+
+.editor-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--bg-app);
+}
+
+/* ========================================
+   HEADER (Overleaf Deep Forest Green)
+   ======================================== */
+.editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-lg);
+  background: var(--brand-green);
+  color: #ffffff;
+  min-height: 48px;
+  gap: var(--space-lg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.editor-header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  min-width: 0;
+}
+
+.editor-back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.editor-back-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.project-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  min-width: 0;
+}
+
+.project-name {
+  font-weight: 600;
+  font-size: var(--font-size-base);
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  color: rgba(255, 255, 255, 0.9);
+  font-family: var(--font-mono);
+}
+
+.file-icon {
+  font-size: 12px;
+}
+
+.dirty-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #facc15;
+}
+
+.editor-header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex-shrink: 0;
+}
+
+.compile-time {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--font-size-xs);
+  color: rgba(255, 255, 255, 0.85);
+  font-variant-numeric: tabular-nums;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+}
+
+/* Iconic Overleaf Green Recompile Button */
+.btn-compile {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #16a34a;
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-compile:hover {
+  background: #15803d;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.btn-compile:active {
+  transform: translateY(1px);
+}
+
+.btn-compile.compiling {
+  background: #0284c7;
+  cursor: wait;
+}
+
+.btn-compile.error {
+  background: #dc2626;
+}
+
+.btn-compile.error:hover {
+  background: #b91c1c;
+}
+
+/* ========================================
+   BODY & SPLIT PANELS
+   ======================================== */
+.editor-body {
+  flex: 1;
+  overflow: hidden;
+  background: var(--bg-surface);
+}
+
+.editor-panels {
+  height: 100%;
+}
+
+.editor-panel,
+.preview-panel {
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.editor-panel-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  border-right: 1px solid var(--border-subtle);
+}
+
+.editor-content {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Resize Divider Handle */
+.resize-handle {
+  width: 5px;
+  background: #e2e8f0;
+  transition: background 0.15s ease;
+  position: relative;
+  cursor: col-resize;
+}
+
+.resize-handle:hover,
+.resize-handle[data-resize-handle-active] {
+  background: var(--brand-green);
+}
+
+.resize-handle::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -4px;
+  right: -4px;
+}
+
+/* ========================================
+   ERROR DRAWER
+   ======================================== */
+.error-panel {
+  border-top: 1px solid #fecaca;
+  background: #fff5f5;
+  max-height: 180px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.error-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: #fee2e2;
+  border-bottom: 1px solid #fca5a5;
+}
+
+.error-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #991b1b;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+}
+
+.error-list {
+  overflow-y: auto;
+  padding: 8px 14px;
+}
+
+.error-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 12px;
+  color: #b91c1c;
+  font-family: var(--font-mono);
+  line-height: 1.5;
+}
+
+.error-item svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ========================================
+   STATUS BAR
+   ======================================== */
+.status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3px 16px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  min-height: 24px;
+  color: #64748b;
+  font-size: 11.5px;
+  user-select: none;
+}
+
+.status-left,
+.status-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.status-icon.success {
+  color: #16a34a;
+}
+
+.status-icon.error {
+  color: #dc2626;
+}

@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="64" y1="48" x2="448" y2="464" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#064e3b" />
+      <stop offset="50%" stop-color="#022c22" />
+      <stop offset="100%" stop-color="#011b15" />
+    </linearGradient>
+
+    <!-- Squircle Border Subtle Highlight -->
+    <linearGradient id="borderGrad" x1="128" y1="40" x2="384" y2="472" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#34d399" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#059669" stop-opacity="0.1" />
+    </linearGradient>
+
+    <!-- Document Gradient -->
+    <linearGradient id="docGrad" x1="220" y1="120" x2="380" y2="390" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#f0fdf4" />
+      <stop offset="100%" stop-color="#d1fae5" />
+    </linearGradient>
+
+    <!-- Document Fold Gradient -->
+    <linearGradient id="foldGrad" x1="310" y1="120" x2="360" y2="170" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#a7f3d0" />
+      <stop offset="100%" stop-color="#6ee7b7" />
+    </linearGradient>
+
+    <!-- Leaf Main Body Gradient -->
+    <linearGradient id="leafGrad" x1="120" y1="120" x2="280" y2="380" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#34d399" />
+      <stop offset="40%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+
+    <!-- Leaf Highlight/Secondary Curve -->
+    <linearGradient id="leafAccent" x1="160" y1="140" x2="260" y2="340" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#6ee7b7" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+
+    <!-- Drop Shadows -->
+    <filter id="docShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.4" />
+    </filter>
+
+    <filter id="leafShadow" x="-15%" y="-15%" width="135%" height="135%">
+      <feDropShadow dx="-4" dy="14" stdDeviation="14" flood-color="#011b15" flood-opacity="0.55" />
+    </filter>
+  </defs>
+
+  <!-- Squircle App Container -->
+  <rect x="36" y="36" width="440" height="440" rx="98" fill="url(#bgGrad)" stroke="url(#borderGrad)" stroke-width="4" />
+
+  <!-- Document (Resume / Paper) -->
+  <g filter="url(#docShadow)">
+    <!-- Document Base with Folded Top-Right Corner -->
+    <path d="M 210 120 
+             L 320 120 
+             L 374 174 
+             L 374 372 
+             C 374 382, 366 390, 356 390 
+             L 210 390 
+             C 200 390, 192 382, 192 372 
+             L 192 138 
+             C 192 128, 200 120, 210 120 Z" 
+          fill="url(#docGrad)" />
+
+    <!-- Folded Corner Flap -->
+    <path d="M 320 120 
+             L 320 162 
+             C 320 168, 326 174, 332 174 
+             L 374 174 Z" 
+          fill="url(#foldGrad)" />
+
+    <!-- LaTeX Document Lines -->
+    <rect x="250" y="200" width="94" height="7" rx="3.5" fill="#047857" opacity="0.8" />
+    <rect x="240" y="222" width="104" height="6" rx="3" fill="#065f46" opacity="0.45" />
+    <rect x="230" y="240" width="114" height="6" rx="3" fill="#065f46" opacity="0.45" />
+    
+    <rect x="220" y="264" width="70" height="6" rx="3" fill="#047857" opacity="0.75" />
+    <rect x="220" y="282" width="124" height="6" rx="3" fill="#065f46" opacity="0.45" />
+    <rect x="220" y="300" width="110" height="6" rx="3" fill="#065f46" opacity="0.45" />
+    <rect x="220" y="318" width="118" height="6" rx="3" fill="#065f46" opacity="0.45" />
+
+    <rect x="220" y="342" width="60" height="6" rx="3" fill="#047857" opacity="0.75" />
+    <rect x="220" y="360" width="90" height="6" rx="3" fill="#065f46" opacity="0.45" />
+  </g>
+
+  <!-- Stylized Emerald Leaf -->
+  <g filter="url(#leafShadow)">
+    <!-- Main Leaf Body -->
+    <path d="M 152 388 
+             C 142 360, 134 300, 148 238 
+             C 162 176, 212 126, 290 102 
+             C 294 100, 298 104, 296 108 
+             C 292 168, 274 234, 234 290 
+             C 198 340, 160 376, 152 388 Z" 
+          fill="url(#leafGrad)" />
+
+    <!-- Leaf Spine & Primary Vein (LaTeX Integral / Root Flow) -->
+    <path d="M 152 388 
+             C 166 332, 198 250, 294 104" 
+          stroke="#ecfdf5" 
+          stroke-width="5" 
+          stroke-linecap="round" 
+          stroke-linejoin="round" 
+          opacity="0.9" />
+
+    <!-- Lateral Delicate Veins -->
+    <path d="M 180 324 C 204 316, 234 322, 244 330" 
+          stroke="#a7f3d0" 
+          stroke-width="3" 
+          stroke-linecap="round" 
+          opacity="0.7" />
+    <path d="M 198 280 C 226 270, 252 278, 266 288" 
+          stroke="#a7f3d0" 
+          stroke-width="3" 
+          stroke-linecap="round" 
+          opacity="0.7" />
+    <path d="M 224 230 C 248 218, 268 226, 280 236" 
+          stroke="#a7f3d0" 
+          stroke-width="3" 
+          stroke-linecap="round" 
+          opacity="0.7" />
+
+    <!-- Stem Arc -->
+    <path d="M 152 388 C 146 412, 140 422, 134 426" 
+          stroke="#059669" 
+          stroke-width="6" 
+          stroke-linecap="round" />
+  </g>
+</svg>

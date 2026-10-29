@@ -1,0 +1,146 @@
+/* ========================================
+   OVERLEAF PDF CANVAS DESK
+   ======================================== */
+
+.pdf-viewer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg-desk);
+}
+
+.pdf-viewport {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding: 24px 16px 48px 16px;
+}
+
+/* Floating Recompile Pill */
+.pdf-recompiling-pill {
+  position: sticky;
+  top: 12px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #0f172a;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(2, 96, 70, 0.25);
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  animation: fadeInDown 0.2s ease-out;
+}
+
+.compile-spinner-sm {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #cbd5e1;
+  border-top-color: #026046;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.pdf-document-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  transition: opacity 0.2s ease;
+}
+
+.pdf-document-wrapper.is-compiling {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Genuine Physical Paper Shadow */
+.pdf-page-wrapper {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.08);
+  border-radius: 2px;
+  background: #ffffff;
+  overflow: hidden;
+  transition: transform 0.15s ease;
+}
+
+.pdf-page-wrapper canvas {
+  display: block;
+}
+
+/* Placeholders */
+.pdf-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  color: #64748b;
+  gap: 12px;
+  text-align: center;
+  padding: 32px;
+}
+
+.pdf-placeholder h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.pdf-placeholder p {
+  font-size: 13px;
+  color: #64748b;
+  max-width: 300px;
+  line-height: 1.5;
+}
+
+.pdf-placeholder.error h3 {
+  color: #dc2626;
+}
+
+.placeholder-icon {
+  font-size: 40px;
+  margin-bottom: 4px;
+}
+
+/* Compile Spinner */
+.compile-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #cbd5e1;
+  border-top-color: #026046;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.pdf-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+}

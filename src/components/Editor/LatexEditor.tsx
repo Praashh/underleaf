@@ -1,0 +1,138 @@
+import React, { useCallback, useMemo, useRef, useEffect } from 'react';
+import CodeMirror, { ReactCodeMirrorRef } from '@uiw/react-codemirror';
+import { EditorView } from '@codemirror/view';
+import { HighlightStyle, syntaxHighlighting } from '@codemirror/language';
+import { tags as t } from '@lezer/highlight';
+import { latex } from 'codemirror-lang-latex';
+import { useEditorStore } from '../../store/editorStore';
+import './LatexEditor.css';
+
+// Overleaf LaTeX Light Highlight Style (Screenshot 1)
+const overleafHighlightStyle = HighlightStyle.define([
+  // % Comments in bright green
+  { tag: t.comment, color: '#2e7d32', fontStyle: 'normal' },
+  { tag: t.lineComment, color: '#2e7d32', fontStyle: 'normal' },
+  { tag: t.blockComment, color: '#2e7d32', fontStyle: 'normal' },
+
+  // LaTeX commands (\documentclass, \usepackage, \begin, \end, \input) in deep blue
+  { tag: [t.keyword, t.definitionKeyword, t.operatorKeyword], color: '#1a56db', fontWeight: '500' },
+  { tag: [t.variableName, t.tagName], color: '#1a56db' },
+  { tag: [t.standard(t.variableName)], color: '#1a56db' },
+
+  // Brackets [letterpaper, 11pt] in teal / cyan
+  { tag: [t.bracket, t.squareBracket], color: '#0284c7' },
+  { tag: [t.atom, t.literal], color: '#0284c7' },
+
+  // Curly braces {article} in dark
+  { tag: [t.brace, t.paren], color: '#111827' },
+  { tag: [t.string, t.special(t.string)], color: '#111827' },
+  { tag: t.content, color: '#111827' },
+]);
+
+// Editor theme configuration
+const overleafTheme = EditorView.theme({
+  '&': {
+    height: '100%',
+    backgroundColor: '#ffffff',
+    color: '#111827',
+  },
+  '.cm-scroller': {
+    overflow: 'auto !important',
+    height: '100% !important',
+    lineHeight: '1.65',
+    fontFamily: "'JetBrains Mono', 'Fira Code', 'Menlo', Monaco, monospace",
+  },
+  '.cm-content': {
+    fontFamily: "'JetBrains Mono', 'Fira Code', 'Menlo', Monaco, monospace",
+    fontSize: '13.5px',
+    lineHeight: '1.65',
+    padding: '8px 0',
+  },
+  '.cm-gutters': {
+    backgroundColor: '#f8fafc',
+    color: '#94a3b8',
+    borderRight: '1px solid #e2e8f0',
+    fontFamily: "'JetBrains Mono', monospace",
+    fontSize: '12.5px',
+  },
+  '.cm-activeLine': {
+    backgroundColor: '#f8fafc',
+  },
+  '.cm-activeLineGutter': {
+    backgroundColor: '#f1f5f9',
+    color: '#1e293b',
+    fontWeight: '600',
+  },
+  '.cm-cursor': {
+    borderLeftColor: '#0f172a',
+    borderLeftWidth: '2px',
+  },
+});
+
+interface LatexEditorProps {
+  onViewReady?: (view: EditorView | null) => void;
+}
+
+const LatexEditor: React.FC<LatexEditorProps> = ({ onViewReady }) => {
+  const { content, setContent } = useEditorStore();
+  const cmRef = useRef<ReactCodeMirrorRef>(null);
+
+  const onChange = useCallback(
+    (value: string) => {
+      setContent(value);
+    },
+    [setContent]
+  );
+
+  const onCreateEditor = useCallback(
+    (view: EditorView) => {
+      onViewReady?.(view);
+    },
+    [onViewReady]
+  );
+
+  useEffect(() => {
+    if (cmRef.current?.view) {
+      onViewReady?.(cmRef.current.view);
+    }
+  }, [onViewReady]);
+
+  const extensions = useMemo(() => {
+    return [
+      latex(),
+      overleafTheme,
+      syntaxHighlighting(overleafHighlightStyle),
+      EditorView.lineWrapping,
+    ];
+  }, []);
+
+  return (
+    <div className="latex-editor">
+      <CodeMirror
+        ref={cmRef}
+        className="latex-codemirror-wrapper"
+        value={content}
+        height="100%"
+        theme="light"
+        extensions={extensions}
+        onChange={onChange}
+        onCreateEditor={onCreateEditor}
+        basicSetup={{
+          lineNumbers: true,
+          highlightActiveLineGutter: true,
+          highlightActiveLine: true,
+          foldGutter: true,
+          autocompletion: true,
+          bracketMatching: true,
+          closeBrackets: true,
+          indentOnInput: true,
+          syntaxHighlighting: true,
+          searchKeymap: true,
+          tabSize: 2,
+        }}
+      />
+    </div>
+  );
+};
+
+export default LatexEditor;
