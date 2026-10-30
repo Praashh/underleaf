@@ -32,7 +32,6 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import { useEditorStore } from '../../store/editorStore';
 import PdfToolbar from './PdfToolbar';
-import './PdfViewer.css';
 
 // Configure PDF.js worker
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -66,13 +65,12 @@ class PdfErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState>
   render() {
     if (this.state.hasError) {
       return (
-        <div className="pdf-placeholder error">
-          <div className="placeholder-icon">⚠️</div>
-          <h3>PDF Display Error</h3>
-          <p>{this.state.error?.message || 'Failed to render PDF preview'}</p>
+        <div className="flex flex-col items-center justify-center h-full w-full text-text-muted gap-3 text-center p-8">
+          <div className="text-[40px] mb-1">⚠️</div>
+          <h3 className="text-[16px] font-semibold text-error">PDF Display Error</h3>
+          <p className="text-[13px] text-text-muted max-w-[300px] leading-[1.5]">{this.state.error?.message || 'Failed to render PDF preview'}</p>
           <button
-            className="btn btn-secondary btn-sm"
-            style={{ marginTop: '12px' }}
+            className="btn btn-secondary btn-sm mt-3"
             onClick={() => this.setState({ hasError: false, error: null })}
           >
             Retry Preview
@@ -112,7 +110,7 @@ const PdfViewer: React.FC = () => {
   const zoomFit = () => setScale(1.0);
 
   return (
-    <div className="pdf-viewer">
+    <div className="flex flex-col h-full bg-bg-desk">
       <PdfToolbar
         currentPage={currentPage}
         numPages={numPages}
@@ -123,29 +121,29 @@ const PdfViewer: React.FC = () => {
         onZoomFit={zoomFit}
       />
 
-      <div className="pdf-viewport">
+      <div className="flex-1 overflow-auto flex flex-col items-center relative py-6 px-4 pb-12">
         <PdfErrorBoundary>
           {/* Initial state before compilation */}
           {!pdfFile && compileStatus === 'idle' && (
-            <div className="pdf-placeholder">
-              <div className="placeholder-icon">📄</div>
-              <h3>No PDF Preview</h3>
-              <p>Click <strong>Recompile</strong> to generate the PDF preview</p>
+            <div className="flex flex-col items-center justify-center h-full w-full text-text-muted gap-3 text-center p-8">
+              <div className="text-[40px] mb-1">📄</div>
+              <h3 className="text-[16px] font-semibold text-[#1e293b]">No PDF Preview</h3>
+              <p className="text-[13px] text-text-muted max-w-[300px] leading-[1.5]">Click <strong>Recompile</strong> to generate the PDF preview</p>
             </div>
           )}
 
           {/* Initial compilation when no previous PDF exists */}
           {compileStatus === 'compiling' && !pdfFile && (
-            <div className="pdf-placeholder">
+            <div className="flex flex-col items-center justify-center h-full w-full text-text-muted gap-3 text-center p-8">
               <div className="compile-spinner" />
-              <h3>Compiling…</h3>
-              <p>Generating your document</p>
+              <h3 className="text-[16px] font-semibold text-[#1e293b]">Compiling…</h3>
+              <p className="text-[13px] text-text-muted max-w-[300px] leading-[1.5]">Generating your document</p>
             </div>
           )}
 
           {/* Recompilation floating indicator when PDF already exists */}
           {compileStatus === 'compiling' && pdfFile && (
-            <div className="pdf-recompiling-pill">
+            <div className="sticky top-3 z-50 flex items-center gap-2 bg-white/95 backdrop-blur-lg text-text-primary py-2 px-4.5 rounded-full shadow-[0_4px_16px_rgba(0,0,0,0.12),0_1px_3px_rgba(0,0,0,0.08)] border border-brand-green/25 text-[13px] font-medium mb-4 animate-fade-in-down">
               <div className="compile-spinner-sm" />
               <span>Compiling document…</span>
             </div>
@@ -153,30 +151,30 @@ const PdfViewer: React.FC = () => {
 
           {/* Compilation failed with no PDF to show */}
           {compileStatus === 'error' && !pdfFile && (
-            <div className="pdf-placeholder error">
-              <div className="placeholder-icon">⚠️</div>
-              <h3>Compilation Failed</h3>
-              <p>Check the error panel below the editor for details</p>
+            <div className="flex flex-col items-center justify-center h-full w-full text-text-muted gap-3 text-center p-8">
+              <div className="text-[40px] mb-1">⚠️</div>
+              <h3 className="text-[16px] font-semibold text-error">Compilation Failed</h3>
+              <p className="text-[13px] text-text-muted max-w-[300px] leading-[1.5]">Check the error panel below the editor for details</p>
             </div>
           )}
 
           {loadError && (
-            <div className="pdf-placeholder error">
-              <div className="placeholder-icon">⚠️</div>
-              <h3>Failed to Load PDF</h3>
-              <p>{loadError}</p>
+            <div className="flex flex-col items-center justify-center h-full w-full text-text-muted gap-3 text-center p-8">
+              <div className="text-[40px] mb-1">⚠️</div>
+              <h3 className="text-[16px] font-semibold text-error">Failed to Load PDF</h3>
+              <p className="text-[13px] text-text-muted max-w-[300px] leading-[1.5]">{loadError}</p>
             </div>
           )}
 
           {pdfFile && !loadError && (
             <div
-              className={`pdf-document-wrapper ${
-                compileStatus === 'compiling' ? 'is-compiling' : ''
+              className={`flex flex-col items-center gap-5 transition-opacity duration-200 ${
+                compileStatus === 'compiling' ? 'opacity-70 pointer-events-none' : ''
               }`}
             >
               <Suspense
                 fallback={
-                  <div className="pdf-loading">
+                  <div className="flex items-center justify-center p-12">
                     <div className="compile-spinner" />
                   </div>
                 }
@@ -186,16 +184,16 @@ const PdfViewer: React.FC = () => {
                   onLoadSuccess={onDocumentLoadSuccess}
                   onLoadError={onDocumentLoadError}
                   loading={
-                    <div className="pdf-loading">
+                    <div className="flex items-center justify-center p-12">
                       <div className="compile-spinner" />
                     </div>
                   }
                 >
                   {Array.from(new Array(numPages), (_, index) => (
-                    <div key={`page_${index + 1}`} className="pdf-page-wrapper">
+                    <div key={`page_${index + 1}`} className="shadow-paper rounded-sm bg-white overflow-hidden transition-transform duration-150">
                       <Suspense
                         fallback={
-                          <div className="pdf-loading">
+                          <div className="flex items-center justify-center p-12">
                             <div className="compile-spinner" />
                           </div>
                         }

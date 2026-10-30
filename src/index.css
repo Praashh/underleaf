@@ -1,37 +1,36 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
 
 /* ========================================
-   OVERLEAF AUTHENTIC DESIGN SYSTEM
+   TAILWIND v4 THEME (Design Tokens)
    ======================================== */
-
-:root {
+@theme {
   /* Brand: Overleaf Signature British Forest Green */
-  --brand-green-dark: #013f2e;
-  --brand-green: #026046;
-  --brand-green-hover: #037354;
-  --brand-green-light: #e6f4f0;
-  --brand-green-border: #a3d9cb;
+  --color-brand-green-dark: #013f2e;
+  --color-brand-green: #026046;
+  --color-brand-green-hover: #037354;
+  --color-brand-green-light: #e6f4f0;
+  --color-brand-green-border: #a3d9cb;
 
   /* Accent Button Green */
-  --accent-btn: #15803d;
-  --accent-btn-hover: #166534;
-  --accent-btn-active: #14532d;
+  --color-accent-btn: #15803d;
+  --color-accent-btn-hover: #166534;
+  --color-accent-btn-active: #14532d;
 
   /* Surface & Canvas Colors */
-  --bg-app: #f4f6f8;
-  --bg-desk: #eaedf1;
-  --bg-surface: #ffffff;
-  --bg-sidebar: #f8fafc;
-  --bg-subtle: #f1f5f9;
-  --bg-hover: #e2e8f0;
-  --bg-active: #cbd5e1;
+  --color-bg-app: #f4f6f8;
+  --color-bg-desk: #eaedf1;
+  --color-bg-surface: #ffffff;
+  --color-bg-sidebar: #f8fafc;
+  --color-bg-subtle: #f1f5f9;
+  --color-bg-hover: #e2e8f0;
+  --color-bg-active: #cbd5e1;
 
   /* Text Colors */
-  --text-primary: #0f172a;
-  --text-secondary: #334155;
-  --text-muted: #64748b;
-  --text-inverse: #ffffff;
-  --text-brand: #026046;
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #334155;
+  --color-text-muted: #64748b;
+  --color-text-inverse: #ffffff;
+  --color-text-brand: #026046;
 
   /* Status Colors */
   --color-success: #15803d;
@@ -50,219 +49,24 @@
   --color-info-bg: #e0f2fe;
 
   /* Borders & Dividers */
-  --border-subtle: #e2e8f0;
-  --border-medium: #cbd5e1;
-  --border-strong: #94a3b8;
-  --border-brand: #026046;
-
-  /* Spacing */
-  --space-2xs: 2px;
-  --space-xs: 4px;
-  --space-sm: 8px;
-  --space-md: 12px;
-  --space-lg: 16px;
-  --space-xl: 20px;
-  --space-2xl: 28px;
-  --space-3xl: 40px;
-
-  /* Radii */
-  --radius-xs: 3px;
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
-  --radius-xl: 12px;
-  --radius-full: 9999px;
-
-  /* Physical Elevations */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
-  --shadow-paper: 0 4px 20px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08);
-  --shadow-modal: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --color-border-subtle: #e2e8f0;
+  --color-border-medium: #cbd5e1;
+  --color-border-strong: #94a3b8;
+  --color-border-brand: #026046;
 
   /* Typography */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', Menlo, Monaco, Consolas, monospace;
   --font-serif: 'Georgia', 'Times New Roman', serif;
 
-  --font-size-xs: 11px;
-  --font-size-sm: 12.5px;
-  --font-size-base: 13.5px;
-  --font-size-md: 15px;
-  --font-size-lg: 17px;
-  --font-size-xl: 20px;
-  --font-size-2xl: 26px;
+  /* Shadows */
+  --shadow-paper: 0 4px 20px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-modal: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
 
-  /* Transitions */
-  --transition-fast: 120ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-base: 180ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* ========================================
-   RESET & FOUNDATIONS
-   ======================================== */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html, body, #root {
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-  font-family: var(--font-sans);
-  font-size: var(--font-size-base);
-  color: var(--text-primary);
-  background-color: var(--bg-app);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-input, button, textarea, select {
-  font-family: inherit;
-  font-size: inherit;
-}
-
-/* Tabular numerals for stats and line numbers */
-.tabular-nums {
-  font-variant-numeric: tabular-nums;
-}
-
-/* Focus visibility matching Web Interface Guidelines */
-:focus-visible {
-  outline: 2px solid var(--brand-green);
-  outline-offset: 2px;
-}
-
-/* ========================================
-   BUTTON SYSTEM
-   ======================================== */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  font-weight: 500;
-  font-size: var(--font-size-sm);
-  padding: 6px 14px;
-  border-radius: var(--radius-md);
-  border: 1px solid transparent;
-  cursor: pointer;
-  user-select: none;
-  white-space: nowrap;
-  transition: background-color var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
-}
-
-.btn:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-/* Primary Overleaf Green */
-.btn-primary {
-  background-color: var(--accent-btn);
-  color: #ffffff;
-  border-color: var(--accent-btn);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-}
-
-.btn-primary:hover {
-  background-color: var(--accent-btn-hover);
-  border-color: var(--accent-btn-hover);
-}
-
-.btn-primary:active {
-  background-color: var(--accent-btn-active);
-}
-
-/* Secondary Button */
-.btn-secondary {
-  background-color: var(--bg-surface);
-  color: var(--text-primary);
-  border-color: var(--border-medium);
-  box-shadow: var(--shadow-sm);
-}
-
-.btn-secondary:hover {
-  background-color: var(--bg-subtle);
-  border-color: var(--border-strong);
-}
-
-.btn-secondary:active {
-  background-color: var(--bg-hover);
-}
-
-/* Ghost Button */
-.btn-ghost {
-  background-color: transparent;
-  color: var(--text-secondary);
-  border-color: transparent;
-}
-
-.btn-ghost:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-  color: var(--text-primary);
-}
-
-/* Danger Button */
-.btn-danger {
-  background-color: #fee2e2;
-  color: #b91c1c;
-  border-color: #fca5a5;
-}
-
-.btn-danger:hover {
-  background-color: #fecaca;
-  color: #991b1b;
-}
-
-/* Icon-only button */
-.btn-icon {
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border-radius: var(--radius-md);
-}
-
-.btn-sm {
-  padding: 4px 10px;
-  font-size: var(--font-size-xs);
-}
-
-.btn-lg {
-  padding: 8px 18px;
-  font-size: var(--font-size-base);
-}
-
-/* ========================================
-   MODAL & DIALOG
-   ======================================== */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(15, 23, 42, 0.45);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
-  animation: modalFadeIn 150ms ease-out;
-}
-
-.modal-content {
-  background: var(--bg-surface);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-modal);
-  border: 1px solid var(--border-subtle);
-  width: 90%;
-  max-width: 580px;
-  max-height: 85vh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  animation: modalScaleUp 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  /* Custom Animations */
+  --animate-modal-fade-in: modalFadeIn 150ms ease-out;
+  --animate-modal-scale-up: modalScaleUp 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-fade-in-down: fadeInDown 0.2s ease-out;
 }
 
 @keyframes modalFadeIn {
@@ -275,68 +79,323 @@ input, button, textarea, select {
   to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-.modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-lg) var(--space-xl);
-  border-bottom: 1px solid var(--border-subtle);
-}
-
-.modal-title {
-  font-size: var(--font-size-lg);
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.modal-body {
-  padding: var(--space-xl);
-  overflow-y: auto;
-  flex: 1;
-}
-
-.modal-footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: var(--space-sm);
-  padding: var(--space-md) var(--space-xl);
-  border-top: 1px solid var(--border-subtle);
-  background: var(--bg-sidebar);
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* ========================================
-   FORM CONTROLS
+   BASE LAYER (Reset & Foundations)
    ======================================== */
-.form-group {
-  margin-bottom: var(--space-lg);
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body, #root {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    font-family: var(--font-sans);
+    font-size: 13.5px;
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-app);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  input, button, textarea, select {
+    font-family: inherit;
+    font-size: inherit;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-green);
+    outline-offset: 2px;
+  }
 }
 
-.form-label {
-  display: block;
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-  color: var(--text-secondary);
-  margin-bottom: 6px;
-}
+/* ========================================
+   COMPONENT LAYER (Reusable Classes)
+   ======================================== */
+@layer components {
+  /* ── Button System ── */
+  .btn {
+    @apply inline-flex items-center justify-center gap-1.5 font-medium
+           px-3.5 py-1.5 rounded-md border border-transparent cursor-pointer
+           select-none whitespace-nowrap;
+    font-size: 12.5px;
+    transition: background-color 120ms cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 120ms cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 120ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
 
-.form-input {
-  width: 100%;
-  padding: 8px 12px;
-  background-color: var(--bg-surface);
-  border: 1px solid var(--border-medium);
-  border-radius: var(--radius-md);
-  color: var(--text-primary);
-  font-size: var(--font-size-base);
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
-}
+  .btn:disabled {
+    @apply opacity-55 cursor-not-allowed pointer-events-none;
+  }
 
-.form-input:focus {
-  outline: none;
-  border-color: var(--brand-green);
-  box-shadow: 0 0 0 3px rgba(2, 96, 70, 0.15);
-}
+  .btn-primary {
+    @apply bg-accent-btn text-white border-accent-btn shadow-sm;
+  }
+  .btn-primary:hover {
+    @apply bg-accent-btn-hover border-accent-btn-hover;
+  }
+  .btn-primary:active {
+    @apply bg-accent-btn-active;
+  }
 
-.form-input::placeholder {
-  color: var(--text-muted);
+  .btn-secondary {
+    @apply bg-bg-surface text-text-primary border-border-medium shadow-sm;
+  }
+  .btn-secondary:hover {
+    @apply bg-bg-subtle border-border-strong;
+  }
+  .btn-secondary:active {
+    @apply bg-bg-hover;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-text-secondary border-transparent;
+  }
+  .btn-ghost:hover {
+    @apply text-text-primary;
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  .btn-danger {
+    @apply bg-error-bg border-error-border;
+    color: #b91c1c;
+  }
+  .btn-danger:hover {
+    background-color: #fecaca;
+    color: #991b1b;
+  }
+
+  .btn-icon {
+    @apply w-8 h-8 p-0 rounded-md;
+  }
+  .btn-sm {
+    @apply px-2.5 py-1;
+    font-size: 11px;
+  }
+  .btn-lg {
+    @apply px-4.5 py-2;
+    font-size: 13.5px;
+  }
+
+  /* ── Toolbar Button (shared Editor + PDF) ── */
+  .toolbar-btn {
+    @apply flex items-center justify-center border border-transparent rounded cursor-pointer;
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    color: #475569;
+    transition: all 0.15s ease;
+  }
+  .toolbar-btn:hover:not(:disabled) {
+    @apply bg-bg-hover text-text-primary;
+  }
+  .toolbar-btn:active:not(:disabled) {
+    @apply bg-bg-active;
+    transform: scale(0.96);
+  }
+  .toolbar-btn:disabled {
+    @apply opacity-35 cursor-not-allowed;
+  }
+
+  /* ── Compile Button ── */
+  .btn-compile {
+    @apply inline-flex items-center gap-[7px] px-3.5 py-1.5 border-none rounded-md
+           font-sans font-semibold cursor-pointer text-white whitespace-nowrap;
+    font-size: 13px;
+    background: #16a34a;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: all 0.15s ease;
+  }
+  .btn-compile:hover {
+    background: #15803d;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  }
+  .btn-compile:active {
+    transform: translateY(1px);
+  }
+  .btn-compile.compiling {
+    background: #0284c7;
+    cursor: wait;
+  }
+  .btn-compile.error {
+    background: #dc2626;
+  }
+  .btn-compile.error:hover {
+    background: #b91c1c;
+  }
+
+  /* ── CodeMirror Overrides (LatexEditor) ── */
+  .latex-editor {
+    @apply h-full w-full min-h-0 flex flex-col bg-white overflow-hidden;
+  }
+
+  .latex-editor .latex-codemirror-wrapper,
+  .latex-editor .cm-theme-light,
+  .latex-editor .cm-theme,
+  .latex-editor > div {
+    height: 100% !important;
+    width: 100% !important;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .latex-editor .cm-editor {
+    height: 100% !important;
+    width: 100% !important;
+    flex: 1;
+    min-height: 0;
+    font-family: var(--font-mono);
+    font-size: 13.5px;
+    background-color: #ffffff;
+    color: #111827;
+  }
+
+  .latex-editor .cm-scroller {
+    height: 100% !important;
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+    overflow: auto !important;
+    overflow-y: auto !important;
+    overflow-x: auto !important;
+    line-height: 1.65;
+    font-family: inherit;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .latex-editor .cm-scroller::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .latex-editor .cm-scroller::-webkit-scrollbar-track {
+    background: #f8fafc;
+  }
+  .latex-editor .cm-scroller::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+  }
+  .latex-editor .cm-scroller::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+
+  .latex-editor .cm-gutters {
+    background-color: #f8fafc;
+    color: #94a3b8;
+    border-right: 1px solid #e2e8f0;
+    padding: 0 4px 0 8px;
+    font-size: 12.5px;
+    font-family: var(--font-mono);
+    user-select: none;
+  }
+
+  .latex-editor .cm-lineNumbers .cm-gutterElement {
+    padding: 0 8px 0 4px;
+    min-width: 30px;
+    text-align: right;
+    color: #64748b;
+  }
+
+  .latex-editor .cm-activeLineGutter {
+    background-color: #f1f5f9;
+    color: #1e293b;
+    font-weight: 600;
+  }
+
+  .latex-editor .cm-activeLine {
+    background-color: #f8fafc;
+  }
+
+  .latex-editor .cm-cursor {
+    border-left-color: #0f172a;
+    border-left-width: 2px;
+  }
+
+  .latex-editor .cm-selectionBackground,
+  .latex-editor ::selection {
+    background-color: #c7d2fe !important;
+  }
+
+  .latex-editor.cm-focused .cm-selectionBackground {
+    background-color: #bae6fd !important;
+  }
+
+  .latex-editor .cm-matchingBracket {
+    background-color: #e0f2fe;
+    color: #0369a1 !important;
+    font-weight: 600;
+  }
+
+  .cm-warning-gutter-marker {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #f59e0b;
+    font-size: 12px;
+    margin-right: 4px;
+  }
+
+  /* ── Visual Editor Inline Input ── */
+  .visual-inline-input {
+    @apply border border-transparent rounded py-0.5 px-1 outline-none bg-transparent;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    transition: all 0.15s ease;
+  }
+  .visual-inline-input:hover {
+    @apply bg-bg-subtle border-border-medium;
+  }
+  .visual-inline-input:focus {
+    @apply bg-white;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+  }
+
+  /* ── Resize Handle ── */
+  .resize-handle {
+    width: 5px;
+    background: #e2e8f0;
+    transition: background 0.15s ease;
+    position: relative;
+    cursor: col-resize;
+  }
+  .resize-handle:hover,
+  .resize-handle[data-resize-handle-active] {
+    background: var(--color-brand-green);
+  }
+  .resize-handle::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -4px;
+    right: -4px;
+  }
+
+  /* ── Compile Spinners ── */
+  .compile-spinner {
+    @apply w-8 h-8 rounded-full;
+    border: 3px solid #cbd5e1;
+    border-top-color: #026046;
+    animation: spin 0.8s linear infinite;
+  }
+
+  .compile-spinner-sm {
+    @apply rounded-full;
+    width: 14px;
+    height: 14px;
+    border: 2px solid #cbd5e1;
+    border-top-color: #026046;
+    animation: spin 0.7s linear infinite;
+  }
 }

@@ -5,7 +5,6 @@ import { HighlightStyle, syntaxHighlighting } from '@codemirror/language';
 import { tags as t } from '@lezer/highlight';
 import { latex } from 'codemirror-lang-latex';
 import { useEditorStore } from '../../store/editorStore';
-import './LatexEditor.css';
 
 // Overleaf LaTeX Light Highlight Style (Screenshot 1)
 const overleafHighlightStyle = HighlightStyle.define([

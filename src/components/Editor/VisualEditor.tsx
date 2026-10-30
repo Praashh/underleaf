@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { ChevronDown, ChevronUp, Eye } from 'lucide-react';
 import { useEditorStore } from '../../store/editorStore';
-import './VisualEditor.css';
 
 const VisualEditor: React.FC = () => {
   const { content, setContent } = useEditorStore();
@@ -62,10 +61,10 @@ const VisualEditor: React.FC = () => {
   }, [bodyContent]);
 
   return (
-    <div className="visual-editor">
+    <div className="flex flex-col h-full bg-white text-gray-900 overflow-y-auto font-sans p-0">
       {/* Top Banner / Mode indicator */}
-      <div className="visual-mode-actions">
-        <div className="visual-badge">
+      <div className="flex items-center justify-between py-2 px-6 bg-bg-sidebar border-b border-border-subtle text-[12.5px] text-text-muted">
+        <div className="inline-flex items-center gap-1 py-0.5 px-2 bg-[#ecfdf5] text-[#059669] border border-[#a7f3d0] rounded-xl text-[11.5px] font-medium">
           <Eye size={13} />
           Visual Mode (Rich Document)
         </div>
@@ -73,23 +72,23 @@ const VisualEditor: React.FC = () => {
       </div>
 
       {/* Collapsible Preamble Card (Screenshot 2) */}
-      <div className="visual-preamble-card">
+      <div className="mx-6 mt-4 mb-2 bg-bg-sidebar border border-border-subtle rounded-lg overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
         <div
-          className="visual-preamble-header"
+          className="flex items-center justify-between py-2.5 px-4 cursor-pointer bg-white select-none text-[13.5px] font-medium text-text-secondary transition-colors duration-150 hover:bg-bg-sidebar"
           onClick={() => setIsPreambleExpanded((prev) => !prev)}
         >
-          <div className="visual-preamble-title">
+          <div className="flex items-center gap-2">
             <span>Show document preamble</span>
           </div>
-          <div className="visual-preamble-icon">
+          <div className="text-text-muted transition-transform duration-200">
             {isPreambleExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
           </div>
         </div>
 
         {isPreambleExpanded && (
-          <div className="visual-preamble-content">
+          <div className="py-3 px-4 border-t border-border-subtle bg-bg-sidebar">
             <textarea
-              className="visual-preamble-textarea"
+              className="w-full h-[180px] font-mono text-[12.5px] leading-[1.5] py-2.5 px-3 border border-border-medium rounded-md bg-white text-[#1e293b] resize-y outline-none focus:border-[#3b82f6] focus:shadow-[0_0_0_2px_rgba(59,130,246,0.15)]"
               value={preamble}
               onChange={(e) => handlePreambleChange(e.target.value)}
               placeholder="% Document classes, packages, and commands..."
@@ -99,7 +98,7 @@ const VisualEditor: React.FC = () => {
       </div>
 
       {/* Main Document Body */}
-      <div className="visual-document-body">
+      <div className="py-4 px-9 pb-[60px] max-w-[820px] mx-auto w-full">
         {/* Render lines with Overleaf Visual Hybrid styling (Screenshot 2) */}
         {parsedLines.map((line, idx) => {
           const trimmed = line.trim();
@@ -107,7 +106,7 @@ const VisualEditor: React.FC = () => {
           // Green comments: %--------HEADING--------
           if (trimmed.startsWith('%')) {
             return (
-              <div key={idx} className="visual-comment">
+              <div key={idx} className="font-mono text-[13px] text-[#2e7d32] my-3 mb-1.5 select-none whitespace-pre-wrap">
                 {line}
               </div>
             );
@@ -118,8 +117,8 @@ const VisualEditor: React.FC = () => {
           if (sectionMatch) {
             const title = sectionMatch[1];
             return (
-              <div key={idx} className="visual-heading-block">
-                <div className="visual-heading-tag">
+              <div key={idx} className="mt-5 mb-2.5">
+                <div className="font-mono text-[13px] text-[#1a56db] font-medium">
                   \section{'{'}
                   <input
                     type="text"
@@ -130,7 +129,9 @@ const VisualEditor: React.FC = () => {
                   />
                   {'}'}
                 </div>
-                <div className="visual-heading-rendered">{title}</div>
+                <div className="font-serif text-[24px] font-bold text-gray-900 -tracking-[0.01em] mt-0.5 border-b-[1.5px] border-gray-900 pb-0.5">
+                  {title}
+                </div>
               </div>
             );
           }
@@ -140,9 +141,9 @@ const VisualEditor: React.FC = () => {
           if (subSectionMatch) {
             const title = subSectionMatch[1];
             return (
-              <div key={idx} className="visual-heading-block">
-                <div className="visual-heading-tag">\subsection{`{${title}}`}</div>
-                <div className="visual-subheading-rendered">{title}</div>
+              <div key={idx} className="mt-5 mb-2.5">
+                <div className="font-mono text-[13px] text-[#1a56db] font-medium">\subsection{`{${title}}`}</div>
+                <div className="font-serif text-[18px] font-semibold text-gray-800 mt-3.5">{title}</div>
               </div>
             );
           }
@@ -154,7 +155,7 @@ const VisualEditor: React.FC = () => {
 
           // Formatted LaTeX commands & environments
           return (
-            <div key={idx} className="visual-hybrid-line">
+            <div key={idx} className="font-mono text-[13.5px] leading-[1.7] text-gray-900 my-0.5 whitespace-pre-wrap break-words">
               {renderFormattedLatexLine(line)}
             </div>
           );
@@ -172,21 +173,21 @@ function renderFormattedLatexLine(line: string) {
   return parts.map((part, index) => {
     if (part.startsWith('\\')) {
       return (
-        <span key={index} className="visual-hybrid-cmd">
+        <span key={index} className="text-[#1a56db] font-medium">
           {part}
         </span>
       );
     }
     if (part === '{' || part === '}') {
       return (
-        <span key={index} className="visual-hybrid-curly">
+        <span key={index} className="text-gray-900">
           {part}
         </span>
       );
     }
     if (part === '[' || part === ']') {
       return (
-        <span key={index} className="visual-arg-opt">
+        <span key={index} className="text-info">
           {part}
         </span>
       );
@@ -200,7 +201,7 @@ function renderFormattedLatexLine(line: string) {
       part.includes('202')
     ) {
       return (
-        <span key={index} className="visual-hybrid-highlight">
+        <span key={index} className="bg-[#fef08a] px-0.5 rounded-sm">
           {part}
         </span>
       );

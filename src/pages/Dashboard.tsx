@@ -17,7 +17,6 @@ import {
   deleteProject as deleteProjectApi,
   renameProject as renameProjectApi,
 } from '../utils/tauri';
-import './Dashboard.css';
 
 // Resume templates
 const TEMPLATES = [
@@ -397,64 +396,66 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="dashboard">
+    <div className="flex flex-col h-screen bg-bg-app">
       {/* Header */}
-      <header className="dashboard-header">
-        <div className="dashboard-brand">
-          <div className="brand-logo-icon">
+      <header className="flex items-center justify-between px-5 h-[52px] bg-brand-green text-text-inverse shadow-sm z-10 shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center justify-center w-8 h-8 bg-white/[0.18] rounded-md text-white">
             <Leaf size={18} />
           </div>
-          <span className="brand-title">Underleaf</span>
+          <span className="text-[17px] font-bold -tracking-[0.02em] text-white">Underleaf</span>
         </div>
       </header>
 
       {/* Body with Sidebar and Main View */}
-      <div className="dashboard-body">
+      <div className="flex flex-1 overflow-hidden">
         {/* Overleaf Sidebar */}
-        <aside className="dashboard-sidebar">
+        <aside className="w-60 bg-bg-surface border-r border-border-subtle flex flex-col p-4 px-3 shrink-0">
           <button
-            className="btn btn-primary sidebar-new-btn"
+            className="btn btn-primary w-full py-2.5 px-4 text-[13.5px] font-semibold mb-5 justify-center"
             onClick={() => setShowNewProject(true)}
           >
             <Plus size={16} />
             New Project
           </button>
 
-          <nav className="sidebar-nav">
-            <button className="sidebar-nav-item active">
-              <span className="sidebar-nav-icon">
+          <nav className="flex flex-col gap-0.5 flex-1">
+            <button className="flex items-center justify-between py-2 px-3 rounded-md text-brand-green text-[12.5px] font-semibold cursor-pointer border-none bg-brand-green-light w-full text-left transition-all duration-[120ms]">
+              <span className="flex items-center gap-2.5">
                 <FileText size={16} />
                 All Projects
               </span>
-              <span className="sidebar-badge">{projects.length}</span>
+              <span className="text-[11px] px-[7px] py-0.5 bg-brand-green rounded-full text-white">
+                {projects.length}
+              </span>
             </button>
-            <button className="sidebar-nav-item">
-              <span className="sidebar-nav-icon">
+            <button className="flex items-center justify-between py-2 px-3 rounded-md text-text-secondary text-[12.5px] font-medium cursor-pointer border-none bg-transparent w-full text-left transition-all duration-[120ms] hover:bg-bg-subtle hover:text-text-primary">
+              <span className="flex items-center gap-2.5">
                 <Clock size={16} />
                 Recent Projects
               </span>
             </button>
           </nav>
 
-          <div className="sidebar-footer">
+          <div className="pt-3 border-t border-border-subtle text-[11px] text-text-muted">
             <span>Storage: ~/underleaf/projects</span>
           </div>
         </aside>
 
         {/* Main Content */}
-        <main className="dashboard-main">
-          <div className="dashboard-container">
+        <main className="flex-1 overflow-y-auto px-7 py-5 bg-bg-app">
+          <div className="max-w-[1120px] mx-auto">
             {/* Toolbar */}
-            <div className="dashboard-toolbar">
-              <div className="dashboard-title-group">
-                <h1>All Projects</h1>
+            <div className="flex items-center justify-between mb-4 gap-3">
+              <div>
+                <h1 className="text-[20px] font-bold text-text-primary -tracking-[0.01em]">All Projects</h1>
               </div>
 
-              <div className="dashboard-search-bar">
-                <Search size={14} className="search-icon" />
+              <div className="flex items-center relative w-[300px]">
+                <Search size={14} className="absolute left-2.5 text-text-muted pointer-events-none" />
                 <input
                   type="text"
-                  className="search-input"
+                  className="w-full py-[7px] pr-3 pl-[34px] bg-bg-surface border border-border-medium rounded-md text-[12.5px] text-text-primary transition-all duration-[120ms] focus:outline-none focus:border-brand-green focus:shadow-[0_0_0_3px_rgba(2,96,70,0.12)]"
                   placeholder="Search projects…"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -464,18 +465,20 @@ const Dashboard: React.FC = () => {
 
             {/* Projects Table / Empty State */}
             {isLoading ? (
-              <div className="projects-table-container">
-                <div style={{ padding: '32px', textAlign: 'center', color: '#64748b' }}>
+              <div className="bg-bg-surface rounded-lg border border-border-subtle shadow-sm overflow-hidden">
+                <div className="p-8 text-center text-text-muted">
                   Loading projects…
                 </div>
               </div>
             ) : filteredProjects.length === 0 ? (
-              <div className="projects-empty">
-                <div className="empty-icon-wrap">
+              <div className="py-10 px-5 text-center bg-bg-surface rounded-lg border border-dashed border-border-medium">
+                <div className="w-16 h-16 mx-auto mb-3 flex items-center justify-center bg-brand-green-light text-brand-green rounded-full">
                   <FileText size={28} />
                 </div>
-                <h2>{searchQuery ? 'No matching projects' : 'No projects yet'}</h2>
-                <p>
+                <h2 className="text-[17px] font-semibold text-text-primary mb-1.5">
+                  {searchQuery ? 'No matching projects' : 'No projects yet'}
+                </h2>
+                <p className="text-text-muted text-[12.5px] max-w-[380px] mx-auto mb-5">
                   {searchQuery
                     ? 'Try searching with a different keyword.'
                     : 'Create your first document or start with a resume template.'}
@@ -491,39 +494,39 @@ const Dashboard: React.FC = () => {
                 )}
               </div>
             ) : (
-              <div className="projects-table-container">
-                <table className="projects-table">
+              <div className="bg-bg-surface rounded-lg border border-border-subtle shadow-sm overflow-hidden">
+                <table className="w-full border-collapse text-left text-[12.5px]">
                   <thead>
                     <tr>
-                      <th style={{ width: '50%' }}>Title</th>
-                      <th style={{ width: '20%' }}>Owner</th>
-                      <th style={{ width: '20%' }}>Last Modified</th>
-                      <th style={{ width: '10%', textAlign: 'right' }}>Actions</th>
+                      <th className="py-2.5 px-4 text-[11px] font-semibold uppercase tracking-[0.04em] text-text-muted bg-bg-sidebar border-b border-border-subtle w-[50%]">Title</th>
+                      <th className="py-2.5 px-4 text-[11px] font-semibold uppercase tracking-[0.04em] text-text-muted bg-bg-sidebar border-b border-border-subtle w-[20%]">Owner</th>
+                      <th className="py-2.5 px-4 text-[11px] font-semibold uppercase tracking-[0.04em] text-text-muted bg-bg-sidebar border-b border-border-subtle w-[20%]">Last Modified</th>
+                      <th className="py-2.5 px-4 text-[11px] font-semibold uppercase tracking-[0.04em] text-text-muted bg-bg-sidebar border-b border-border-subtle w-[10%] text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {filteredProjects.map((project) => (
                       <tr
                         key={project.id}
-                        className="project-row"
+                        className="cursor-pointer transition-colors duration-[120ms] hover:bg-[#f8fafc] border-b border-border-subtle last:border-b-0"
                         onClick={() => openProject(project)}
                       >
-                        <td>
-                          <div className="project-title-cell">
-                            <div className="project-file-icon">
+                        <td className="py-3 px-4 align-middle">
+                          <div className="flex items-center gap-3">
+                            <div className="flex items-center justify-center w-8 h-8 bg-[#ecfdf5] text-brand-green rounded shrink-0">
                               <FileText size={16} />
                             </div>
-                            <span className="project-title-text">{project.name}</span>
+                            <span className="font-semibold text-text-primary text-[13.5px] hover:text-brand-green">{project.name}</span>
                           </div>
                         </td>
-                        <td>
-                          <span className="project-owner-badge">You</span>
+                        <td className="py-3 px-4 align-middle">
+                          <span className="inline-flex items-center px-2 py-0.5 bg-bg-subtle rounded-full text-[11.5px] text-text-secondary">You</span>
                         </td>
-                        <td className="project-date-cell tabular-nums">
+                        <td className="py-3 px-4 align-middle text-text-muted text-[12.5px] tabular-nums">
                           {formatDate(project.updated_at)}
                         </td>
                         <td
-                          className="project-actions-cell"
+                          className="py-3 px-4 align-middle text-right relative"
                           onClick={(e) => e.stopPropagation()}
                         >
                           <button
@@ -541,9 +544,9 @@ const Dashboard: React.FC = () => {
                           </button>
 
                           {contextMenu?.projectId === project.id && (
-                            <div className="context-menu">
+                            <div className="absolute right-4 top-full bg-bg-surface border border-border-subtle rounded-md shadow-md z-50 min-w-[150px] overflow-hidden">
                               <button
-                                className="context-menu-item"
+                                className="flex items-center gap-2 w-full py-2 px-3 border-none bg-transparent text-[12.5px] text-text-primary cursor-pointer text-left hover:bg-bg-subtle"
                                 onClick={() => {
                                   setRenameName(project.name);
                                   setRenameModal(project);
@@ -554,7 +557,7 @@ const Dashboard: React.FC = () => {
                                 Rename
                               </button>
                               <button
-                                className="context-menu-item danger"
+                                className="flex items-center gap-2 w-full py-2 px-3 border-none bg-transparent text-[12.5px] text-error cursor-pointer text-left hover:bg-error-bg"
                                 onClick={() => handleDeleteProject(project.id)}
                               >
                                 <Trash2 size={14} />
@@ -575,13 +578,13 @@ const Dashboard: React.FC = () => {
 
       {/* New Project Modal */}
       {showNewProject && (
-        <div className="modal-overlay" onClick={() => setShowNewProject(false)}>
+        <div className="fixed inset-0 bg-slate-900/45 backdrop-blur-[4px] flex items-center justify-center z-[100] animate-modal-fade-in" onClick={() => setShowNewProject(false)}>
           <div
-            className="modal-content"
+            className="bg-bg-surface rounded-xl shadow-modal border border-border-subtle w-[90%] max-w-[580px] max-h-[85vh] flex flex-col overflow-hidden animate-modal-scale-up"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="modal-header">
-              <h2 className="modal-title">New Project</h2>
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border-subtle">
+              <h2 className="text-[17px] font-semibold text-text-primary">New Project</h2>
               <button
                 className="btn btn-ghost btn-sm"
                 onClick={() => setShowNewProject(false)}
@@ -590,12 +593,12 @@ const Dashboard: React.FC = () => {
               </button>
             </div>
 
-            <div className="modal-body">
-              <div className="form-group">
-                <label className="form-label">Project Name</label>
+            <div className="px-5 py-5 overflow-y-auto flex-1">
+              <div className="mb-4">
+                <label className="block text-[12.5px] font-medium text-text-secondary mb-1.5">Project Name</label>
                 <input
                   type="text"
-                  className="form-input"
+                  className="w-full py-2 px-3 bg-bg-surface border border-border-medium rounded-md text-[13.5px] text-text-primary transition-all duration-[120ms] focus:outline-none focus:border-brand-green focus:shadow-[0_0_0_3px_rgba(2,96,70,0.15)] placeholder:text-text-muted"
                   placeholder="e.g. My Resume"
                   value={newProjectName}
                   onChange={(e) => setNewProjectName(e.target.value)}
@@ -604,25 +607,29 @@ const Dashboard: React.FC = () => {
                 />
               </div>
 
-              <div className="form-group">
-                <label className="form-label">Choose a Template</label>
-                <div className="template-grid">
+              <div className="mb-4">
+                <label className="block text-[12.5px] font-medium text-text-secondary mb-1.5">Choose a Template</label>
+                <div className="grid grid-cols-2 gap-3 mt-2">
                   {TEMPLATES.map((tmpl) => (
                     <div
                       key={tmpl.id}
-                      className={`template-card ${selectedTemplate === tmpl.id ? 'selected' : ''}`}
+                      className={`p-3 border-[1.5px] rounded-lg cursor-pointer bg-bg-surface text-left transition-all duration-[120ms] hover:border-brand-green-border hover:bg-bg-sidebar ${
+                        selectedTemplate === tmpl.id
+                          ? 'border-brand-green bg-brand-green-light shadow-[0_0_0_2px_var(--color-brand-green)]'
+                          : 'border-border-subtle'
+                      }`}
                       onClick={() => setSelectedTemplate(tmpl.id)}
                     >
-                      <div className="template-icon">{tmpl.icon}</div>
-                      <div className="template-name">{tmpl.name}</div>
-                      <div className="template-desc">{tmpl.description}</div>
+                      <div className="text-[22px] mb-2">{tmpl.icon}</div>
+                      <div className="font-semibold text-[12.5px] text-text-primary mb-[3px]">{tmpl.name}</div>
+                      <div className="text-[11.5px] text-text-muted leading-[1.4]">{tmpl.description}</div>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
 
-            <div className="modal-footer">
+            <div className="flex items-center justify-end gap-2 px-5 py-3 border-t border-border-subtle bg-bg-sidebar">
               <button
                 className="btn btn-secondary"
                 onClick={() => setShowNewProject(false)}
@@ -643,10 +650,10 @@ const Dashboard: React.FC = () => {
 
       {/* Rename Modal */}
       {renameModal && (
-        <div className="modal-overlay" onClick={() => setRenameModal(null)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2 className="modal-title">Rename Project</h2>
+        <div className="fixed inset-0 bg-slate-900/45 backdrop-blur-[4px] flex items-center justify-center z-[100] animate-modal-fade-in" onClick={() => setRenameModal(null)}>
+          <div className="bg-bg-surface rounded-xl shadow-modal border border-border-subtle w-[90%] max-w-[580px] max-h-[85vh] flex flex-col overflow-hidden animate-modal-scale-up" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border-subtle">
+              <h2 className="text-[17px] font-semibold text-text-primary">Rename Project</h2>
               <button
                 className="btn btn-ghost btn-sm"
                 onClick={() => setRenameModal(null)}
@@ -654,12 +661,12 @@ const Dashboard: React.FC = () => {
                 ✕
               </button>
             </div>
-            <div className="modal-body">
-              <div className="form-group">
-                <label className="form-label">New Name</label>
+            <div className="px-5 py-5 overflow-y-auto flex-1">
+              <div className="mb-4">
+                <label className="block text-[12.5px] font-medium text-text-secondary mb-1.5">New Name</label>
                 <input
                   type="text"
-                  className="form-input"
+                  className="w-full py-2 px-3 bg-bg-surface border border-border-medium rounded-md text-[13.5px] text-text-primary transition-all duration-[120ms] focus:outline-none focus:border-brand-green focus:shadow-[0_0_0_3px_rgba(2,96,70,0.15)] placeholder:text-text-muted"
                   value={renameName}
                   onChange={(e) => setRenameName(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleRename()}
@@ -667,7 +674,7 @@ const Dashboard: React.FC = () => {
                 />
               </div>
             </div>
-            <div className="modal-footer">
+            <div className="flex items-center justify-end gap-2 px-5 py-3 border-t border-border-subtle bg-bg-sidebar">
               <button
                 className="btn btn-secondary"
                 onClick={() => setRenameModal(null)}

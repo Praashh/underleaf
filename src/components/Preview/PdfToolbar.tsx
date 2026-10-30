@@ -3,7 +3,6 @@ import { ZoomIn, ZoomOut, Maximize2, ChevronLeft, ChevronRight, Download } from 
 import { save } from '@tauri-apps/plugin-dialog';
 import { useProjectStore } from '../../store/projectStore';
 import { exportPdf } from '../../utils/tauri';
-import './PdfToolbar.css';
 
 interface PdfToolbarProps {
   currentPage: number;
@@ -44,8 +43,8 @@ const PdfToolbar: React.FC<PdfToolbarProps> = ({
   };
 
   return (
-    <div className="pdf-toolbar">
-      <div className="pdf-toolbar-left">
+    <div className="flex items-center justify-between px-3.5 py-1.5 bg-bg-sidebar border-b border-border-subtle min-h-[40px] select-none">
+      <div className="flex items-center gap-1">
         <button
           className="toolbar-btn"
           onClick={() => onPageChange(Math.max(1, currentPage - 1))}
@@ -53,7 +52,7 @@ const PdfToolbar: React.FC<PdfToolbarProps> = ({
         >
           <ChevronLeft size={16} />
         </button>
-        <span className="page-indicator">
+        <span className="text-[12px] font-medium text-text-secondary min-w-[50px] text-center tabular-nums">
           {numPages > 0 ? `${currentPage} / ${numPages}` : '— / —'}
         </span>
         <button
@@ -65,11 +64,13 @@ const PdfToolbar: React.FC<PdfToolbarProps> = ({
         </button>
       </div>
 
-      <div className="pdf-toolbar-center">
+      <div className="flex items-center gap-1">
         <button className="toolbar-btn" onClick={onZoomOut}>
           <ZoomOut size={15} />
         </button>
-        <span className="zoom-indicator">{Math.round(scale * 100)}%</span>
+        <span className="text-[12px] font-medium text-text-secondary min-w-[44px] text-center tabular-nums">
+          {Math.round(scale * 100)}%
+        </span>
         <button className="toolbar-btn" onClick={onZoomIn}>
           <ZoomIn size={15} />
         </button>
@@ -78,9 +79,9 @@ const PdfToolbar: React.FC<PdfToolbarProps> = ({
         </button>
       </div>
 
-      <div className="pdf-toolbar-right">
+      <div className="flex items-center gap-1">
         <button
-          className="toolbar-btn download-btn"
+          className="toolbar-btn !text-brand-green !bg-brand-green-light !border-brand-green-border hover:!bg-[#ccebe2] hover:!text-brand-green-dark"
           onClick={handleDownload}
           title="Download PDF"
         >

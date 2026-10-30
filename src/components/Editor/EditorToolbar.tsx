@@ -16,7 +16,6 @@ import {
   Eye,
 } from 'lucide-react';
 import { useEditorStore } from '../../store/editorStore';
-import './EditorToolbar.css';
 
 interface ToolbarButtonProps {
   icon: React.ReactNode;
@@ -30,7 +29,7 @@ const ToolbarButton: React.FC<ToolbarButtonProps> = ({
   onClick,
 }) => (
   <button
-    className="toolbar-btn tooltip"
+    className="toolbar-btn"
     data-tooltip={label}
     onClick={onClick}
     aria-label={label}
@@ -48,12 +47,16 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ onAction }) => {
   const { editorMode, setEditorMode } = useEditorStore();
 
   return (
-    <div className="editor-toolbar">
+    <div className="flex items-center px-3 py-1.5 bg-bg-sidebar border-b border-border-subtle gap-1.5 min-h-[40px] overflow-x-auto select-none">
       {/* Overleaf [ Code ] [ Visual ] Tabs */}
-      <div className="toolbar-mode-toggle">
+      <div className="flex bg-bg-hover rounded-md p-0.5 gap-0.5">
         <button
           type="button"
-          className={`mode-btn ${editorMode === 'code' ? 'active' : ''}`}
+          className={`inline-flex items-center py-1 px-2.5 border-none rounded text-[12px] font-medium cursor-pointer transition-all duration-150 ${
+            editorMode === 'code'
+              ? 'bg-white text-text-primary font-semibold shadow-sm'
+              : 'bg-transparent text-text-muted hover:text-text-primary'
+          }`}
           onClick={() => setEditorMode('code')}
         >
           <Code size={13} style={{ marginRight: '4px', verticalAlign: '-2px' }} />
@@ -61,7 +64,11 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ onAction }) => {
         </button>
         <button
           type="button"
-          className={`mode-btn ${editorMode === 'visual' ? 'active' : ''}`}
+          className={`inline-flex items-center py-1 px-2.5 border-none rounded text-[12px] font-medium cursor-pointer transition-all duration-150 ${
+            editorMode === 'visual'
+              ? 'bg-white text-text-primary font-semibold shadow-sm'
+              : 'bg-transparent text-text-muted hover:text-text-primary'
+          }`}
           onClick={() => setEditorMode('visual')}
         >
           <Eye size={13} style={{ marginRight: '4px', verticalAlign: '-2px' }} />
@@ -69,10 +76,10 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ onAction }) => {
         </button>
       </div>
 
-      <div className="toolbar-divider" />
+      <div className="w-px h-[18px] bg-bg-hover mx-1 shrink-0" />
 
       {/* History */}
-      <div className="toolbar-group">
+      <div className="flex items-center gap-0.5">
         <ToolbarButton
           icon={<Undo2 size={14} />}
           label="Undo (Ctrl+Z)"
@@ -85,10 +92,10 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ onAction }) => {
         />
       </div>
 
-      <div className="toolbar-divider" />
+      <div className="w-px h-[18px] bg-bg-hover mx-1 shrink-0" />
 
       {/* Formatting Tools */}
-      <div className="toolbar-group">
+      <div className="flex items-center gap-0.5">
         <ToolbarButton
           icon={<Bold size={14} />}
           label="Bold (\textbf{})"
@@ -101,9 +108,9 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ onAction }) => {
         />
       </div>
 
-      <div className="toolbar-divider" />
+      <div className="w-px h-[18px] bg-bg-hover mx-1 shrink-0" />
 
-      <div className="toolbar-group">
+      <div className="flex items-center gap-0.5">
         <ToolbarButton
           icon={<Heading1 size={14} />}
           label="Section (\section{})"
@@ -116,9 +123,9 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ onAction }) => {
         />
       </div>
 
-      <div className="toolbar-divider" />
+      <div className="w-px h-[18px] bg-bg-hover mx-1 shrink-0" />
 
-      <div className="toolbar-group">
+      <div className="flex items-center gap-0.5">
         <ToolbarButton
           icon={<List size={14} />}
           label="Bullet List (itemize)"
@@ -136,9 +143,9 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ onAction }) => {
         />
       </div>
 
-      <div className="toolbar-divider" />
+      <div className="w-px h-[18px] bg-bg-hover mx-1 shrink-0" />
 
-      <div className="toolbar-group">
+      <div className="flex items-center gap-0.5">
         <ToolbarButton
           icon={<Sigma size={14} />}
           label="Math Formula ($...$)"
@@ -156,10 +163,10 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ onAction }) => {
         />
       </div>
 
-      <div className="toolbar-spacer" />
+      <div className="flex-1" />
 
       {/* Mode / Editing indicator */}
-      <div className="toolbar-editing-badge">
+      <div className="inline-flex items-center gap-[5px] py-[3px] px-2 bg-bg-subtle border border-border-subtle rounded-xl text-[11.5px] text-text-muted font-medium">
         <Edit2 size={12} />
         <span>Editing</span>
       </div>

@@ -27,7 +27,6 @@ import {
 } from '../utils/tauri';
 import { applyEditorAction, formatFallbackText } from '../utils/editorActions';
 import { EditorView } from '@codemirror/view';
-import './EditorPage.css';
 
 const EditorPage: React.FC = () => {
   const {
@@ -190,33 +189,33 @@ const EditorPage: React.FC = () => {
   };
 
   return (
-    <div className="editor-page">
+    <div className="flex flex-col h-screen bg-bg-app">
       {/* Header */}
-      <header className="editor-header">
-        <div className="editor-header-left">
+      <header className="flex items-center justify-between px-4 bg-brand-green text-white min-h-[48px] gap-4 shadow-sm z-10 shrink-0">
+        <div className="flex items-center gap-3 min-w-0">
           <button
-            className="editor-back-btn"
+            className="flex items-center justify-center w-[30px] h-[30px] border-none bg-white/15 text-white rounded-md cursor-pointer transition-[background] duration-150 hover:bg-white/25"
             onClick={() => setCurrentPage('dashboard')}
             title="Back to Projects"
             aria-label="Back to Projects"
           >
             <ArrowLeft size={16} />
           </button>
-          <div className="project-info">
-            <span className="project-name">
+          <div className="flex items-center gap-3 min-w-0">
+            <span className="font-semibold text-[13.5px] text-white whitespace-nowrap overflow-hidden text-ellipsis">
               {currentProject?.name || 'Untitled'}
             </span>
-            <span className="file-tab">
-              <span className="file-icon">📄</span>
+            <span className="inline-flex items-center gap-1.5 py-[3px] px-2.5 bg-black/20 rounded text-[11px] text-white/90 font-mono">
+              <span className="text-[12px]">📄</span>
               main.tex
-              {isDirty && <span className="dirty-dot" />}
+              {isDirty && <span className="inline-block w-1.5 h-1.5 rounded-full bg-yellow-300" />}
             </span>
           </div>
         </div>
 
-        <div className="editor-header-right">
+        <div className="flex items-center gap-3 shrink-0">
           {compileTime !== null && compileStatus === 'success' && (
-            <span className="compile-time">
+            <span className="flex items-center gap-[5px] text-[11px] text-white/85 tabular-nums bg-black/20 py-[3px] px-2 rounded-full">
               <Clock size={12} />
               {(compileTime / 1000).toFixed(1)}s
             </span>
@@ -234,12 +233,12 @@ const EditorPage: React.FC = () => {
       </header>
 
       {/* Main split view */}
-      <div className="editor-body">
-        <PanelGroup orientation="horizontal" className="editor-panels">
-          <Panel defaultSize={50} minSize={25} className="editor-panel">
-            <div className="editor-panel-inner">
+      <div className="flex-1 overflow-hidden bg-bg-surface">
+        <PanelGroup orientation="horizontal" className="h-full">
+          <Panel defaultSize={50} minSize={25} className="h-full min-h-0 overflow-hidden">
+            <div className="flex flex-col h-full min-h-0 border-r border-border-subtle">
               <EditorToolbar onAction={handleFormatAction} />
-              <div className="editor-content">
+              <div className="flex-1 min-h-0 h-full overflow-hidden bg-white flex flex-col relative">
                 {editorMode === 'code' ? (
                   <LatexEditor
                     onViewReady={(v) => {
@@ -252,9 +251,9 @@ const EditorPage: React.FC = () => {
               </div>
               {/* Error panel */}
               {showErrors && compileErrors.length > 0 && (
-                <div className="error-panel">
-                  <div className="error-panel-header">
-                    <div className="error-panel-title">
+                <div className="border-t border-[#fecaca] bg-[#fff5f5] max-h-[180px] overflow-hidden flex flex-col">
+                  <div className="flex items-center justify-between py-2 px-3.5 bg-error-bg border-b border-error-border">
+                    <div className="flex items-center gap-1.5 text-[#991b1b] text-[11px] font-semibold">
                       <AlertTriangle size={14} />
                       <span>
                         {compileErrors.length} error
@@ -268,10 +267,10 @@ const EditorPage: React.FC = () => {
                       ✕
                     </button>
                   </div>
-                  <div className="error-list">
+                  <div className="overflow-y-auto py-2 px-3.5">
                     {compileErrors.map((err, i) => (
-                      <div key={i} className="error-item">
-                        <XCircle size={12} />
+                      <div key={i} className="flex items-start gap-2 py-1 text-[12px] text-[#b91c1c] font-mono leading-[1.5]">
+                        <XCircle size={12} className="shrink-0 mt-0.5" />
                         <span>{err}</span>
                       </div>
                     ))}
@@ -283,45 +282,45 @@ const EditorPage: React.FC = () => {
 
           <PanelResizeHandle className="resize-handle" />
 
-          <Panel defaultSize={50} minSize={25} className="preview-panel">
+          <Panel defaultSize={50} minSize={25} className="h-full min-h-0 overflow-hidden">
             <PdfViewer />
           </Panel>
         </PanelGroup>
       </div>
 
       {/* Status bar */}
-      <footer className="status-bar">
-        <div className="status-left">
-          <span className="status-item">
+      <footer className="flex items-center justify-between px-4 py-[3px] bg-bg-sidebar border-t border-border-subtle min-h-[24px] text-text-muted text-[11.5px] select-none">
+        <div className="flex items-center gap-4">
+          <span className="flex items-center gap-[5px]">
             {compileStatus === 'success' && (
               <>
-                <CheckCircle2 size={11} className="status-icon success" />
+                <CheckCircle2 size={11} className="text-[#16a34a]" />
                 Compiled successfully
               </>
             )}
             {compileStatus === 'error' && (
               <>
-                <XCircle size={11} className="status-icon error" />
+                <XCircle size={11} className="text-error" />
                 Compilation failed
               </>
             )}
             {compileStatus === 'compiling' && (
               <>
-                <Loader2 size={11} className="status-icon animate-spin" />
+                <Loader2 size={11} className="animate-spin" />
                 Compiling…
               </>
             )}
             {compileStatus === 'idle' && (
-              <span className="status-muted">Ready</span>
+              <span>Ready</span>
             )}
           </span>
         </div>
-        <div className="status-right">
-          <span className="status-item status-muted">
+        <div className="flex items-center gap-4">
+          <span className="flex items-center gap-[5px]">
             {content.split('\n').length} lines
           </span>
-          <span className="status-item status-muted">UTF-8</span>
-          <span className="status-item status-muted">LaTeX</span>
+          <span className="flex items-center gap-[5px]">UTF-8</span>
+          <span className="flex items-center gap-[5px]">LaTeX</span>
         </div>
       </footer>
     </div>

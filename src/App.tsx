@@ -7,7 +7,7 @@ const App: React.FC = () => {
   const { currentPage } = useProjectStore();
 
   return (
-    <div className="app-container">
+    <div className="w-full h-screen overflow-hidden flex flex-col">
       {currentPage === 'dashboard' ? <Dashboard /> : <EditorPage />}
     </div>
   );
