@@ -8,7 +8,7 @@ import { useEditorStore } from '../../store/editorStore';
 import { applyEditorAction } from '../../utils/editorActions';
 
 // Overleaf LaTeX Light Highlight Style (Screenshot 1)
-const overleafHighlightStyle = HighlightStyle.define([
+export const overleafHighlightStyle = HighlightStyle.define([
   // % Comments in bright green
   { tag: t.comment, color: '#2e7d32', fontStyle: 'normal' },
   { tag: t.lineComment, color: '#2e7d32', fontStyle: 'normal' },

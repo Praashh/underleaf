@@ -1,10 +1,12 @@
 import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import CodeMirror, { ReactCodeMirrorRef } from '@uiw/react-codemirror';
 import { EditorView, MatchDecorator, Decoration, ViewPlugin, keymap } from '@codemirror/view';
+import { syntaxHighlighting } from '@codemirror/language';
 import { latex } from 'codemirror-lang-latex';
-import { ChevronDown, ChevronUp, Eye, SlidersHorizontal, Sparkles } from 'lucide-react';
+import { ChevronDown, ChevronUp, SlidersHorizontal } from 'lucide-react';
 import { useEditorStore } from '../../store/editorStore';
 import { applyEditorAction } from '../../utils/editorActions';
+import { overleafHighlightStyle } from './LatexEditor';
 
 // Visual Decorators for Overleaf-like rich rendering
 const boldDecorator = new MatchDecorator({
@@ -189,23 +191,23 @@ const itemPlugin = ViewPlugin.fromClass(
 const visualTheme = EditorView.theme({
   '&': {
     backgroundColor: 'transparent',
-    color: '#0f172a',
-    fontSize: '14.5px',
-    fontFamily: "var(--font-sans)",
+    color: '#111827',
+    fontSize: '13.5px',
+    fontFamily: "'JetBrains Mono', 'Fira Code', Menlo, Monaco, Consolas, monospace",
   },
   '.cm-content': {
-    fontFamily: "var(--font-sans)",
-    fontSize: '14.5px',
-    lineHeight: '1.8',
+    fontFamily: "'JetBrains Mono', 'Fira Code', Menlo, Monaco, Consolas, monospace",
+    fontSize: '13.5px',
+    lineHeight: '1.65',
     padding: '4px 0',
     minHeight: '450px',
   },
   '.cm-line': {
-    padding: '2px 0',
+    padding: '1px 0',
   },
   '.cm-activeLine': {
     backgroundColor: '#f8fafc',
-    borderRadius: '4px',
+    borderRadius: '3px',
   },
   '.cm-cursor': {
     borderLeftColor: '#0f172a',
@@ -302,6 +304,7 @@ const VisualEditor: React.FC<VisualEditorProps> = ({ onViewReady }) => {
   const extensions = useMemo(() => {
     return [
       latex(),
+      syntaxHighlighting(overleafHighlightStyle),
       visualTheme,
       EditorView.lineWrapping,
       boldPlugin,
@@ -332,29 +335,12 @@ const VisualEditor: React.FC<VisualEditorProps> = ({ onViewReady }) => {
   }, []);
 
   return (
-    <div className="flex-1 h-full overflow-y-auto bg-bg-desk flex flex-col items-center py-5 px-4 font-sans select-text">
-      {/* Visual Mode Bar & Preamble Toggle */}
-      <div className="w-full max-w-[850px] mb-3 flex items-center justify-between">
+    <div className="flex-1 h-full overflow-y-auto  flex flex-col items-center py-5 px-3 sm:px-6 font-sans select-text">
 
-        {preambleLineCount > 0 && (
-          <button
-            type="button"
-            className="inline-flex items-center gap-1.5 py-1 px-2.5 bg-white border border-border-subtle hover:border-border-strong rounded-md text-[12px] text-text-secondary cursor-pointer transition-colors shadow-xs"
-            onClick={() => setIsPreambleExpanded((prev) => !prev)}
-          >
-            <SlidersHorizontal size={12} className="text-text-muted" />
-            <span className="font-medium">Document Preamble</span>
-            <span className="bg-bg-subtle text-text-muted text-[10.5px] px-1.5 py-0.2 rounded font-mono">
-              {preambleLineCount} lines
-            </span>
-            {isPreambleExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-          </button>
-        )}
-      </div>
 
       {/* Collapsible Preamble Card */}
       {isPreambleExpanded && (
-        <div className="w-full max-w-[850px] mb-4 bg-white border border-border-subtle rounded-lg overflow-hidden shadow-paper animate-in fade-in slide-in-from-top-2 duration-150">
+        <div className="w-full max-w-[820px] mb-3 border border-border-subtle rounded-lg overflow-hidden shadow-paper animate-in fade-in slide-in-from-top-2 duration-150">
           <div className="flex items-center justify-between py-2 px-4 bg-bg-sidebar border-b border-border-subtle text-[12px] font-medium text-text-secondary">
             <span>Preamble (packages, macros & definitions)</span>
             <span className="text-[11px] text-text-muted">
@@ -374,7 +360,10 @@ const VisualEditor: React.FC<VisualEditorProps> = ({ onViewReady }) => {
       )}
 
       {/* Main Document Body on Paper Canvas */}
-      <div className="w-full max-w-[850px] bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.04)] border border-border-subtle p-7 sm:p-11 md:p-14 min-h-[700px] mb-12">
+      <div
+        className="w-full max-w-[820px]"
+        spellCheck={false}
+      >
         <CodeMirror
           ref={cmRef}
           className="visual-editor-cm"

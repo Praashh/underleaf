@@ -433,7 +433,7 @@
     background-color: #bae6fd !important;
   }
 
-  /* Rich Visual Formatting Decorations */
+  /* Seamless Visual Formatting (Natural document flow without broken baseline or pill clutter) */
   .cm-visual-bold {
     font-weight: 700 !important;
     color: #0f172a !important;
@@ -446,84 +446,69 @@
     text-decoration: underline !important;
   }
   .cm-visual-tag {
-    font-family: var(--font-mono) !important;
-    font-size: 11px !important;
-    padding: 0.5px 3.5px !important;
-    border-radius: 3px !important;
+    font-family: inherit !important;
+    font-size: inherit !important;
     font-weight: 500 !important;
-    vertical-align: baseline !important;
-    letter-spacing: -0.01em !important;
-    opacity: 0.85 !important;
+    color: #1a56db !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    display: inline !important;
   }
   .cm-visual-tag-bold {
-    color: #1d4ed8 !important;
-    background-color: #eff6ff !important;
-    border: 1px solid #dbeafe !important;
+    color: #1a56db !important;
   }
   .cm-visual-tag-italic {
-    color: #4338ca !important;
-    background-color: #eef2ff !important;
-    border: 1px solid #e0e7ff !important;
+    color: #1a56db !important;
   }
   .cm-visual-tag-underline {
-    color: #0d9488 !important;
-    background-color: #f0fdfa !important;
-    border: 1px solid #ccfbf1 !important;
+    color: #0284c7 !important;
   }
   .cm-visual-tag-heading {
-    color: #0369a1 !important;
-    background-color: #f0f9ff !important;
-    border: 1px solid #e0f2fe !important;
+    color: #1a56db !important;
+    font-weight: 600 !important;
   }
   .cm-visual-section {
-    font-family: var(--font-serif) !important;
-    font-size: 21px !important;
     font-weight: 700 !important;
     color: #0f172a !important;
-    border-bottom: 2px solid #0f172a !important;
-    padding-bottom: 2px !important;
+    font-size: 15px !important;
   }
   .cm-visual-subsection {
-    font-family: var(--font-serif) !important;
-    font-size: 17px !important;
     font-weight: 600 !important;
     color: #1e293b !important;
+    font-size: 14px !important;
   }
   .cm-visual-subsubsection {
-    font-family: var(--font-serif) !important;
-    font-size: 15px !important;
     font-weight: 600 !important;
     color: #334155 !important;
+    font-size: 13.5px !important;
   }
   .cm-visual-math {
-    font-family: 'Cambria Math', 'KaTeX_Math', var(--font-serif) !important;
-    font-style: italic !important;
-    background-color: #f8fafc !important;
-    border: 1px solid #e2e8f0 !important;
-    padding: 1px 5px !important;
-    border-radius: 4px !important;
     color: #0f172a !important;
+    font-style: italic !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    background: transparent !important;
   }
   .cm-visual-comment {
     color: #2e7d32 !important;
-    font-style: italic !important;
-    font-family: var(--font-mono) !important;
-    font-size: 12.5px !important;
+    font-style: normal !important;
+    font-family: inherit !important;
+    font-size: inherit !important;
     opacity: 0.9 !important;
   }
   .cm-visual-item {
-    color: #0284c7 !important;
+    color: #1a56db !important;
     font-weight: 600 !important;
-    font-family: var(--font-mono) !important;
   }
   .cm-visual-env {
-    color: #0284c7 !important;
-    background-color: #f0f9ff !important;
-    border: 1px solid #e0f2fe !important;
-    border-radius: 3px !important;
-    padding: 1px 4px !important;
-    font-family: var(--font-mono) !important;
-    font-size: 11.5px !important;
+    color: #1a56db !important;
     font-weight: 500 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    background: transparent !important;
   }
 }
