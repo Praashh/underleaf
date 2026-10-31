@@ -62,16 +62,7 @@ const VisualEditor: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full bg-white text-gray-900 overflow-y-auto font-sans p-0">
-      {/* Top Banner / Mode indicator */}
-      <div className="flex items-center justify-between py-2 px-6 bg-bg-sidebar border-b border-border-subtle text-[12.5px] text-text-muted">
-        <div className="inline-flex items-center gap-1 py-0.5 px-2 bg-[#ecfdf5] text-[#059669] border border-[#a7f3d0] rounded-xl text-[11.5px] font-medium">
-          <Eye size={13} />
-          Visual Mode (Rich Document)
-        </div>
-        <span>Edits update LaTeX automatically</span>
-      </div>
-
-      {/* Collapsible Preamble Card (Screenshot 2) */}
+      {/* Collapsible Preamble Card */}
       <div className="mx-6 mt-4 mb-2 bg-bg-sidebar border border-border-subtle rounded-lg overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
         <div
           className="flex items-center justify-between py-2.5 px-4 cursor-pointer bg-white select-none text-[13.5px] font-medium text-text-secondary transition-colors duration-150 hover:bg-bg-sidebar"
