@@ -1,10 +1,11 @@
 import React, { useCallback, useMemo, useRef, useEffect } from 'react';
 import CodeMirror, { ReactCodeMirrorRef } from '@uiw/react-codemirror';
-import { EditorView } from '@codemirror/view';
+import { EditorView, keymap } from '@codemirror/view';
 import { HighlightStyle, syntaxHighlighting } from '@codemirror/language';
 import { tags as t } from '@lezer/highlight';
 import { latex } from 'codemirror-lang-latex';
 import { useEditorStore } from '../../store/editorStore';
+import { applyEditorAction } from '../../utils/editorActions';
 
 // Overleaf LaTeX Light Highlight Style (Screenshot 1)
 const overleafHighlightStyle = HighlightStyle.define([
@@ -94,6 +95,9 @@ const LatexEditor: React.FC<LatexEditorProps> = ({ onViewReady }) => {
     if (cmRef.current?.view) {
       onViewReady?.(cmRef.current.view);
     }
+    return () => {
+      onViewReady?.(null);
+    };
   }, [onViewReady]);
 
   const extensions = useMemo(() => {
@@ -102,6 +106,22 @@ const LatexEditor: React.FC<LatexEditorProps> = ({ onViewReady }) => {
       overleafTheme,
       syntaxHighlighting(overleafHighlightStyle),
       EditorView.lineWrapping,
+      keymap.of([
+        {
+          key: 'Mod-b',
+          run: (view) => {
+            applyEditorAction(view, 'bold');
+            return true;
+          },
+        },
+        {
+          key: 'Mod-i',
+          run: (view) => {
+            applyEditorAction(view, 'italic');
+            return true;
+          },
+        },
+      ]),
     ];
   }, []);
 

@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import {
   Plus,
   FileText,
-  MoreVertical,
   Trash2,
   Edit3,
   Clock,
   Search,
   Leaf,
+  Loader2,
 } from 'lucide-react';
 import { useProjectStore, ProjectMeta } from '../store/projectStore';
 import { useEditorStore } from '../store/editorStore';
@@ -85,44 +85,44 @@ const TEMPLATE_CONTENT: Record<string, string> = {
 \\begin{document}
 
 \\begin{center}
-    {\\Huge \\scshape Jake Gutierrez} \\\\ \\vspace{1pt}
-    \\small +91-XXXXXXXXXX $|$
-    \\href{mailto:jake@example.com}{\\underline{jake@example.com}} $|$
-    \\href{https://linkedin.com/in/jake}{\\underline{linkedin.com/in/jake}} $|$
-    \\href{https://github.com/jake}{\\underline{github.com/jake}}
+    {\\Huge \\scshape Barnaby Q. Fizzlewhick} \\\\ \\vspace{1pt}
+    \\small +1 (555) 420-BEEF $|$
+    \\href{mailto:barnaby@galaxymail.xyz}{\\underline{barnaby@galaxymail.xyz}} $|$
+    \\href{https://linkedin.com/in/fizzlewhick}{\\underline{linkedin.com/in/fizzlewhick}} $|$
+    \\href{https://github.com/quantum-potato}{\\underline{github.com/quantum-potato}}
 \\end{center}
 
 %-----------EDUCATION-----------
 \\section{Education}
   \\begin{itemize}[leftmargin=0.15in, label={}]
     \\small{\\item{
-      \\textbf{Chaudhary Charan Singh University} \\hfill Uttar Pradesh, Meerut \\\\
-      \\textit{Bachelor's of Computer Applications} \\hfill Aug. 2021 -- May 2024 \\\\
+      \\textbf{Hogwarts School of Quantum Computing} \\hfill Mars Colony, Sector 7 \\\\
+      \\textit{Bachelor of Arcane Sandwich Engineering \\& Wizardry} \\hfill Aug. 2021 -- May 2024 \\\\
     }}
   \\end{itemize}
 
 %-----------CAREER OBJECTIVES-----------
 \\section{Career Objectives}
-  To Work in an Organization Where I Can Apply my expertise to Learn continuously in the Maximum Job Satisfaction
+  To secure a high-voltage position in an intergalactic organization where I can leverage my expertise in microwave burrito thermodynamics, aggressive nap-taking, and debugging with sentient rubber ducks for maximum cosmic satisfaction.
 
 %-----------PROJECTS-----------
 \\section{Projects}
   \\begin{itemize}[leftmargin=0.15in, label={}]
     \\small{\\item{
-      \\textbf{Dragon Game} $|$ \\emph{HTML, CSS, and JavaScript} \\hfill December 2022 \\\\
+      \\textbf{Laser-Guided Pigeon Teleportation} $|$ \\emph{Quantum Rust, Bananas, and Chaos} \\hfill December 2023 \\\\
       \\begin{itemize}
-        \\item Created an interesting web application using JavaScript
-        \\item Implemented the logic of moving objects in game using JavaScript
-        \\item Developed animations components using CSS animations
+        \\item Trained a decentralized flock of sentient pigeons to route internet packets faster than fiber optic cables
+        \\item Reduced packet loss by feeding pigeons organic artisanal breadcrumbs
+        \\item Patented a supersonic coo-to-text algorithm achieving 99.4\\% translation accuracy
       \\end{itemize}
     }}
     \\vspace{4pt}
     \\small{\\item{
-      \\textbf{Snake Game} $|$ \\emph{HTML, CSS, and JavaScript} \\hfill December 2022 \\\\
+      \\textbf{Sentient Toaster Operating System} $|$ \\emph{C++, Sourdough, and Assembly} \\hfill October 2022 \\\\
       \\begin{itemize}
-        \\item Developed a web application with HTML, CSS and JavaScript
-        \\item Implemented the logic of moving objects in game using JavaScript
-        \\item Developed animations components using CSS animations
+        \\item Built a real-time toaster kernel capable of arguing about the philosophical implications of bagels
+        \\item Successfully persuaded the microwave to stop beeping aggressively at 3:00 AM
+        \\item Overclocked the heating coils to toast rye bread at Mach 2.4 speeds
       \\end{itemize}
     }}
   \\end{itemize}
@@ -131,10 +131,10 @@ const TEMPLATE_CONTENT: Record<string, string> = {
 \\section{Technical Skills}
   \\begin{itemize}[leftmargin=0.15in, label={}]
     \\small{\\item{
-      \\textbf{Languages}{: C/C++, HTML/CSS} \\\\
-      \\textbf{Operating System}{: Window 10 and Window 11} \\\\
-      \\textbf{Developer Tools}{: Git, VS Code, GitHub} \\\\
-      \\textbf{Tools}{: Ms Word, MS E, GitHub}
+      \\textbf{Languages}{: Rust, Python, HTML/CSS, Fluent Klingon, Cat Meows} \\\\
+      \\textbf{Operating Systems}{: TempleOS, Arch Linux (btw), Windows 95, Smart Fridge OS} \\\\
+      \\textbf{Superpowers}{: Centering a \\texttt{<div>} on the first attempt, Time Travel (forward only at 1s/s)} \\\\
+      \\textbf{Developer Tools}{: VS Code, Duct Tape, Rubber Duck Debugger, Laser Pointer}
     }}
   \\end{itemize}
 
@@ -297,13 +297,10 @@ const Dashboard: React.FC = () => {
   const [newProjectName, setNewProjectName] = useState('');
   const [selectedTemplate, setSelectedTemplate] = useState('blank');
   const [searchQuery, setSearchQuery] = useState('');
-  const [contextMenu, setContextMenu] = useState<{
-    projectId: string;
-    x: number;
-    y: number;
-  } | null>(null);
   const [renameModal, setRenameModal] = useState<ProjectMeta | null>(null);
   const [renameName, setRenameName] = useState('');
+  const [deleteModal, setDeleteModal] = useState<ProjectMeta | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     loadProjects();
@@ -356,13 +353,16 @@ const Dashboard: React.FC = () => {
   };
 
   const handleDeleteProject = async (id: string) => {
+    setIsDeleting(true);
     try {
       await deleteProjectApi(id);
       removeProject(id);
+      setDeleteModal(null);
     } catch (err) {
       console.error('Failed to delete project:', err);
+    } finally {
+      setIsDeleting(false);
     }
-    setContextMenu(null);
   };
 
   const handleRename = async () => {
@@ -526,45 +526,30 @@ const Dashboard: React.FC = () => {
                           {formatDate(project.updated_at)}
                         </td>
                         <td
-                          className="py-3 px-4 align-middle text-right relative"
+                          className="py-3 px-4 align-middle text-right"
                           onClick={(e) => e.stopPropagation()}
                         >
-                          <button
-                            className="btn btn-ghost btn-icon"
-                            onClick={() => {
-                              setContextMenu(
-                                contextMenu?.projectId === project.id
-                                  ? null
-                                  : { projectId: project.id, x: 0, y: 0 }
-                              );
-                            }}
-                            title="More actions"
-                          >
-                            <MoreVertical size={16} />
-                          </button>
-
-                          {contextMenu?.projectId === project.id && (
-                            <div className="absolute right-4 top-full bg-bg-surface border border-border-subtle rounded-md shadow-md z-50 min-w-[150px] overflow-hidden">
-                              <button
-                                className="flex items-center gap-2 w-full py-2 px-3 border-none bg-transparent text-[12.5px] text-text-primary cursor-pointer text-left hover:bg-bg-subtle"
-                                onClick={() => {
-                                  setRenameName(project.name);
-                                  setRenameModal(project);
-                                  setContextMenu(null);
-                                }}
-                              >
-                                <Edit3 size={14} />
-                                Rename
-                              </button>
-                              <button
-                                className="flex items-center gap-2 w-full py-2 px-3 border-none bg-transparent text-[12.5px] text-error cursor-pointer text-left hover:bg-error-bg"
-                                onClick={() => handleDeleteProject(project.id)}
-                              >
-                                <Trash2 size={14} />
-                                Delete
-                              </button>
-                            </div>
-                          )}
+                          <div className="flex items-center justify-end gap-1.5">
+                            <button
+                              className="btn btn-ghost btn-icon text-text-muted hover:text-text-primary hover:bg-bg-hover active:scale-95 transition-all"
+                              onClick={() => {
+                                setRenameName(project.name);
+                                setRenameModal(project);
+                              }}
+                              title="Rename project"
+                              aria-label="Rename project"
+                            >
+                              <Edit3 size={15} />
+                            </button>
+                            <button
+                              className="btn btn-ghost btn-icon text-text-muted hover:text-error hover:bg-error-bg active:scale-95 active:bg-red-100 transition-all"
+                              onClick={() => setDeleteModal(project)}
+                              title="Delete project"
+                              aria-label="Delete project"
+                            >
+                              <Trash2 size={15} />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -683,6 +668,69 @@ const Dashboard: React.FC = () => {
               </button>
               <button className="btn btn-primary" onClick={handleRename}>
                 Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteModal && (
+        <div
+          className="fixed inset-0 bg-slate-900/45 backdrop-blur-[4px] flex items-center justify-center z-[100] animate-modal-fade-in"
+          onClick={() => !isDeleting && setDeleteModal(null)}
+        >
+          <div
+            className="bg-bg-surface rounded-xl shadow-modal border border-border-subtle w-[90%] max-w-[460px] overflow-hidden animate-modal-scale-up"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border-subtle">
+              <div className="flex items-center gap-2.5">
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-error-bg text-error shrink-0">
+                  <Trash2 size={16} />
+                </div>
+                <h2 className="text-[16px] font-semibold text-text-primary">Delete Project</h2>
+              </div>
+              <button
+                className="btn btn-ghost btn-sm text-text-muted hover:text-text-primary"
+                onClick={() => setDeleteModal(null)}
+                disabled={isDeleting}
+              >
+                ✕
+              </button>
+            </div>
+            <div className="px-5 py-5 text-[13px] text-text-secondary leading-relaxed">
+              <p>
+                Are you sure you want to delete <span className="font-semibold text-text-primary">"{deleteModal.name}"</span>?
+              </p>
+              <p className="mt-2 text-text-muted text-[12px]">
+                This will permanently delete the project and all its associated LaTeX files. This action cannot be undone.
+              </p>
+            </div>
+            <div className="flex items-center justify-end gap-2 px-5 py-3 border-t border-border-subtle bg-bg-sidebar">
+              <button
+                className="btn btn-secondary"
+                onClick={() => setDeleteModal(null)}
+                disabled={isDeleting}
+              >
+                Cancel
+              </button>
+              <button
+                className="btn btn-danger flex items-center gap-1.5"
+                onClick={() => handleDeleteProject(deleteModal.id)}
+                disabled={isDeleting}
+              >
+                {isDeleting ? (
+                  <>
+                    <Loader2 size={14} className="animate-spin" />
+                    Deleting…
+                  </>
+                ) : (
+                  <>
+                    <Trash2 size={14} />
+                    Delete Project
+                  </>
+                )}
               </button>
             </div>
           </div>

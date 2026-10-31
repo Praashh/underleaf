@@ -129,6 +129,19 @@ const EditorPage: React.FC = () => {
     }
   }, [currentProject, content, compileStatus]);
 
+  const editorViewRef = useRef<EditorView | null>(null);
+
+  const handleFormatAction = useCallback(
+    (action: string) => {
+      if (editorViewRef.current) {
+        applyEditorAction(editorViewRef.current, action);
+      } else {
+        setContent(formatFallbackText(content, action));
+      }
+    },
+    [content, setContent]
+  );
+
   // Keyboard shortcuts
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -143,24 +156,19 @@ const EditorPage: React.FC = () => {
           setIsDirty(false);
         }
       }
+      if ((e.metaKey || e.ctrlKey) && (e.key === 'b' || e.key === 'B')) {
+        e.preventDefault();
+        handleFormatAction('bold');
+      }
+      if ((e.metaKey || e.ctrlKey) && (e.key === 'i' || e.key === 'I')) {
+        e.preventDefault();
+        handleFormatAction('italic');
+      }
     };
 
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, [handleCompile, content, currentProject]);
-
-  const editorViewRef = useRef<EditorView | null>(null);
-
-  const handleFormatAction = useCallback(
-    (action: string) => {
-      if (editorViewRef.current) {
-        applyEditorAction(editorViewRef.current, action);
-      } else {
-        setContent(formatFallbackText(content, action));
-      }
-    },
-    [content, setContent]
-  );
+  }, [handleCompile, handleFormatAction, content, currentProject]);
 
   const getCompileIcon = () => {
     switch (compileStatus) {
@@ -246,7 +254,11 @@ const EditorPage: React.FC = () => {
                     }}
                   />
                 ) : (
-                  <VisualEditor />
+                  <VisualEditor
+                    onViewReady={(v) => {
+                      editorViewRef.current = v;
+                    }}
+                  />
                 )}
               </div>
               {/* Error panel */}

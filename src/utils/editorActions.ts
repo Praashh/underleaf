@@ -67,9 +67,11 @@ export function applyEditorAction(view: EditorView, action: EditorActionType | s
 
     case 'section': {
       const sel = view.state.selection.main;
-      const replacement = '\n\\section{Section Title}\n';
+      const selected = view.state.sliceDoc(sel.from, sel.to);
+      const title = selected || 'Section Title';
+      const replacement = `\n\\section{${title}}\n`;
       const titleStart = sel.from + '\n\\section{'.length;
-      const titleEnd = titleStart + 'Section Title'.length;
+      const titleEnd = titleStart + title.length;
       view.dispatch({
         changes: { from: sel.from, to: sel.to, insert: replacement },
         selection: { anchor: titleStart, head: titleEnd },
@@ -81,9 +83,11 @@ export function applyEditorAction(view: EditorView, action: EditorActionType | s
 
     case 'subsection': {
       const sel = view.state.selection.main;
-      const replacement = '\n\\subsection{Subsection Title}\n';
+      const selected = view.state.sliceDoc(sel.from, sel.to);
+      const title = selected || 'Subsection Title';
+      const replacement = `\n\\subsection{${title}}\n`;
       const titleStart = sel.from + '\n\\subsection{'.length;
-      const titleEnd = titleStart + 'Subsection Title'.length;
+      const titleEnd = titleStart + title.length;
       view.dispatch({
         changes: { from: sel.from, to: sel.to, insert: replacement },
         selection: { anchor: titleStart, head: titleEnd },
@@ -123,12 +127,21 @@ export function applyEditorAction(view: EditorView, action: EditorActionType | s
       const sel = view.state.selection.main;
       const selected = view.state.sliceDoc(sel.from, sel.to);
       if (selected) {
-        const replacement = `$${selected}$`;
-        view.dispatch({
-          changes: { from: sel.from, to: sel.to, insert: replacement },
-          selection: { anchor: sel.from + replacement.length },
-          userEvent: 'input',
-        });
+        if (selected.startsWith('$') && selected.endsWith('$') && selected.length >= 2) {
+          const unwrapped = selected.slice(1, -1);
+          view.dispatch({
+            changes: { from: sel.from, to: sel.to, insert: unwrapped },
+            selection: { anchor: sel.from, head: sel.from + unwrapped.length },
+            userEvent: 'input',
+          });
+        } else {
+          const replacement = `$${selected}$`;
+          view.dispatch({
+            changes: { from: sel.from, to: sel.to, insert: replacement },
+            selection: { anchor: sel.from + 1, head: sel.from + 1 + selected.length },
+            userEvent: 'input',
+          });
+        }
       } else {
         const snippet = '$x^2 + y^2 = z^2$';
         const start = sel.from + 1;
@@ -186,23 +199,72 @@ function wrapOrInsert(
   view: EditorView,
   prefix: string,
   suffix: string,
-  _placeholder = ''
+  placeholder = 'text'
 ) {
   const sel = view.state.selection.main;
+  const doc = view.state.doc;
   const selectedText = view.state.sliceDoc(sel.from, sel.to);
 
   if (selectedText) {
+    // 1. If selection itself starts with prefix and ends with suffix -> unwrap
+    if (
+      selectedText.startsWith(prefix) &&
+      selectedText.endsWith(suffix) &&
+      selectedText.length >= prefix.length + suffix.length
+    ) {
+      const unwrapped = selectedText.slice(
+        prefix.length,
+        selectedText.length - suffix.length
+      );
+      view.dispatch({
+        changes: { from: sel.from, to: sel.to, insert: unwrapped },
+        selection: { anchor: sel.from, head: sel.from + unwrapped.length },
+        userEvent: 'input',
+      });
+      view.focus();
+      return;
+    }
+
+    // 2. If selection is surrounded by prefix and suffix -> unwrap
+    const prefixLen = prefix.length;
+    const suffixLen = suffix.length;
+    if (
+      sel.from >= prefixLen &&
+      sel.to + suffixLen <= doc.length &&
+      doc.sliceString(sel.from - prefixLen, sel.from) === prefix &&
+      doc.sliceString(sel.to, sel.to + suffixLen) === suffix
+    ) {
+      view.dispatch({
+        changes: [
+          { from: sel.to, to: sel.to + suffixLen, insert: '' },
+          { from: sel.from - prefixLen, to: sel.from, insert: '' },
+        ],
+        selection: { anchor: sel.from - prefixLen, head: sel.to - prefixLen },
+        userEvent: 'input',
+      });
+      view.focus();
+      return;
+    }
+
+    // 3. Otherwise wrap
     const replacement = `${prefix}${selectedText}${suffix}`;
     view.dispatch({
       changes: { from: sel.from, to: sel.to, insert: replacement },
-      selection: { anchor: sel.from + replacement.length },
+      selection: {
+        anchor: sel.from + prefix.length,
+        head: sel.from + prefix.length + selectedText.length,
+      },
       userEvent: 'input',
     });
   } else {
-    const replacement = `${prefix}${suffix}`;
+    // Empty selection: insert placeholder and select it
+    const textToInsert = placeholder;
+    const replacement = `${prefix}${textToInsert}${suffix}`;
+    const start = sel.from + prefix.length;
+    const end = start + textToInsert.length;
     view.dispatch({
       changes: { from: sel.from, to: sel.to, insert: replacement },
-      selection: { anchor: sel.from + prefix.length },
+      selection: { anchor: start, head: end },
       userEvent: 'input',
     });
   }
