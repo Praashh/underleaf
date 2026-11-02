@@ -3,7 +3,6 @@ import CodeMirror, { ReactCodeMirrorRef } from '@uiw/react-codemirror';
 import { EditorView, MatchDecorator, Decoration, ViewPlugin, keymap } from '@codemirror/view';
 import { syntaxHighlighting } from '@codemirror/language';
 import { latex } from 'codemirror-lang-latex';
-import { ChevronDown, ChevronUp, SlidersHorizontal } from 'lucide-react';
 import { useEditorStore } from '../../store/editorStore';
 import { applyEditorAction } from '../../utils/editorActions';
 import { overleafHighlightStyle } from './LatexEditor';
