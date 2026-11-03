@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
+import React, { useMemo, useCallback, useRef, useEffect } from 'react';
 import CodeMirror, { ReactCodeMirrorRef } from '@uiw/react-codemirror';
 import { EditorView, MatchDecorator, Decoration, ViewPlugin, keymap } from '@codemirror/view';
 import { syntaxHighlighting } from '@codemirror/language';
@@ -226,7 +226,6 @@ interface VisualEditorProps {
 
 const VisualEditor: React.FC<VisualEditorProps> = ({ onViewReady }) => {
   const { content, setContent } = useEditorStore();
-  const [isPreambleExpanded, setIsPreambleExpanded] = useState<boolean>(false);
   const cmRef = useRef<ReactCodeMirrorRef>(null);
 
   // Split document into preamble and body
@@ -253,23 +252,6 @@ const VisualEditor: React.FC<VisualEditorProps> = ({ onViewReady }) => {
       postamble: postamblePart,
     };
   }, [content]);
-
-  const preambleLineCount = useMemo(() => {
-    if (!preamble.trim()) return 0;
-    return preamble.trim().split('\n').length;
-  }, [preamble]);
-
-  // Update preamble
-  const handlePreambleChange = useCallback(
-    (newPreamble: string) => {
-      const beginDoc = content.includes('\\begin{document}')
-        ? '\\begin{document}'
-        : '';
-      const newFullContent = `${newPreamble}${beginDoc}${bodyContent}${postamble}`;
-      setContent(newFullContent);
-    },
-    [bodyContent, postamble, content, setContent]
-  );
 
   // Update document body
   const handleBodyChange = useCallback(
@@ -334,29 +316,7 @@ const VisualEditor: React.FC<VisualEditorProps> = ({ onViewReady }) => {
   }, []);
 
   return (
-    <div className="flex-1 h-full overflow-y-auto  flex flex-col items-center py-5 px-3 sm:px-6 font-sans select-text">
-
-
-      {/* Collapsible Preamble Card */}
-      {isPreambleExpanded && (
-        <div className="w-full max-w-[820px] mb-3 border border-border-subtle rounded-lg overflow-hidden shadow-paper animate-in fade-in slide-in-from-top-2 duration-150">
-          <div className="flex items-center justify-between py-2 px-4 bg-bg-sidebar border-b border-border-subtle text-[12px] font-medium text-text-secondary">
-            <span>Preamble (packages, macros & definitions)</span>
-            <span className="text-[11px] text-text-muted">
-              Auto-included before \begin&#123;document&#125;
-            </span>
-          </div>
-          <div className="p-3 bg-white">
-            <textarea
-              className="w-full h-[150px] font-mono text-[12.5px] leading-[1.6] py-2 px-3 border border-border-medium rounded-md bg-bg-sidebar text-text-primary resize-y outline-none focus:bg-white focus:border-brand-green focus:shadow-[0_0_0_2px_rgba(2,96,70,0.15)]"
-              value={preamble}
-              onChange={(e) => handlePreambleChange(e.target.value)}
-              placeholder="% \documentclass{article}&#10;% \usepackage{amsmath}&#10;% \usepackage{hyperref}"
-              spellCheck={false}
-            />
-          </div>
-        </div>
-      )}
+    <div className="flex-1 h-full overflow-y-auto flex flex-col items-center py-5 px-3 sm:px-6 font-sans select-text">
 
       {/* Main Document Body on Paper Canvas */}
       <div

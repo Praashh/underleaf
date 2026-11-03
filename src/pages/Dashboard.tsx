@@ -44,9 +44,147 @@ const TEMPLATES = [
     description: 'Publication-focused academic curriculum vitae',
     icon: '🎓',
   },
+  {
+    id: 'john-doe',
+    name: 'John Doe Resume',
+    description: 'Minimalist single-column layout with clean rules',
+    icon: '👤',
+  },
 ];
 
 const TEMPLATE_CONTENT: Record<string, string> = {
+  'john-doe': `\\documentclass[10pt,letterpaper]{article}
+
+% ---------- Packages ----------
+\\usepackage[margin=0.55in]{geometry}
+\\usepackage[T1]{fontenc}
+\\usepackage{lmodern}
+\\usepackage{enumitem}
+\\usepackage{titlesec}
+\\usepackage[hidelinks]{hyperref}
+\\usepackage{xcolor}
+\\usepackage{tabularx}
+\\usepackage{microtype}
+
+% ---------- Layout ----------
+\\pagestyle{empty}
+\\setlength{\\parindent}{0pt}
+\\setlength{\\parskip}{0pt}
+\\setlength{\\tabcolsep}{0pt}
+\\definecolor{rulegray}{HTML}{777777}
+
+\\titleformat{\\section}
+  {\\large\\bfseries}
+  {}{0pt}{}
+  [\\vspace{-3pt}\\color{rulegray}\\titlerule]
+\\titlespacing*{\\section}{0pt}{10pt}{6pt}
+
+\\setlist[itemize]{
+  leftmargin=1.15em,
+  itemsep=1.5pt,
+  topsep=2.5pt,
+  parsep=0pt,
+  partopsep=0pt
+}
+
+\\newcommand{\\resumeEntry}[4]{%
+  \\vspace{4pt}\\noindent\\begin{tabularx}{\\textwidth}{@{}X r@{}}
+    \\textbf{#1} & \\textbf{#2} \\\\
+    \\textit{#3} & \\textit{#4}
+  \\end{tabularx}\\par\\vspace{2pt}
+}
+
+\\newcommand{\\tech}[1]{\\noindent\\textit{Tech Stack:} #1\\par\\vspace{2pt}}
+
+\\begin{document}
+
+% ---------- Header ----------
+\\begin{tabularx}{\\textwidth}{@{}X r@{}}
+  {\\LARGE\\textbf{John Doe}} &
+  \\href{https://johndoe.example.com}{johndoe.example.com} \\\\
+  \\textbf{Software Engineer} &
+  \\href{mailto:john.doe@example.com}{john.doe@example.com} \\\\
+  +1 (555) 000-0000 &
+  \\href{https://github.com/johndoe}{github.com/johndoe} $|$ \\href{https://linkedin.com/in/johndoe}{linkedin.com/in/johndoe} \\\\
+\\end{tabularx}
+\\vspace{6pt}
+
+\\section{Education}
+\\resumeEntry
+  {State University}
+  {Aug 2020 -- May 2024}
+  {Bachelor of Science in Computer Science}
+  {GPA: 3.8 / 4.0}
+
+\\section{Experience}
+
+\\resumeEntry
+  {Acme Corporation}
+  {Jun 2023 -- Present}
+  {Software Engineer}
+  {San Francisco, CA}
+\\tech{TypeScript, React, Node.js, PostgreSQL, Docker, AWS}
+\\begin{itemize}
+  \\item Designed and deployed microservices architecture handling over 100K daily active requests with 99.9\\% uptime.
+  \\item Optimized database query execution and caching layer with Redis, reducing API response times by 35\\%.
+  \\item Collaborated with cross-functional product and design teams to deliver end-to-end customer-facing features.
+\\end{itemize}
+
+\\resumeEntry
+  {Global Tech Solutions}
+  {Jan 2022 -- May 2023}
+  {Full Stack Developer}
+  {Remote}
+\\tech{Python, Django, React, MySQL, Redis}
+\\begin{itemize}
+  \\item Developed automated CI/CD deployment pipelines using GitHub Actions, decreasing release cycle times by 40\\%.
+  \\item Built responsive and accessible user interfaces compliant with WCAG accessibility standards.
+  \\item Integrated third-party payment and analytics services, ensuring PCI-DSS compliance and reliable event tracking.
+\\end{itemize}
+
+\\resumeEntry
+  {Startup Labs}
+  {Jun 2021 -- Dec 2021}
+  {Software Engineering Intern}
+  {New York, NY}
+\\tech{JavaScript, Express.js, MongoDB, Jest}
+\\begin{itemize}
+  \\item Created unit and end-to-end integration test suites with Jest, increasing codebase test coverage from 60\\% to 85\\%.
+  \\item Resolved 40+ bug tickets and contributed new features across multiple agile sprint cycles.
+\\end{itemize}
+
+\\section{Projects}
+
+\\resumeEntry
+  {Real-Time Collaboration Platform}
+  {Jan 2024 -- Mar 2024}
+  {Lead Developer}
+  {}
+\\tech{TypeScript, React, Node.js, WebSockets, Redis}
+\\begin{itemize}
+  \\item Architected a real-time collaborative workspace allowing simultaneous multi-user document editing.
+  \\item Implemented operational transformation algorithms and WebSocket channels to synchronize document state.
+\\end{itemize}
+
+\\resumeEntry
+  {Distributed Task Queue}
+  {Sep 2023 -- Nov 2023}
+  {Creator \\& Maintainer}
+  {}
+\\tech{Go, Redis, Docker, Prometheus}
+\\begin{itemize}
+  \\item Built a lightweight distributed background job processing engine with configurable retries and worker pools.
+  \\item Added Prometheus instrumentation and Grafana dashboards for real-time throughput and error rate monitoring.
+\\end{itemize}
+
+\\section{Skills}
+\\vspace{2pt}
+\\textbf{Programming Languages:} Python, TypeScript, JavaScript, Go, Java, SQL, HTML, CSS.\\\\
+\\textbf{Frameworks \\& Libraries:} React, Next.js, Node.js, Express, FastAPI, Tailwind CSS.\\\\
+\\textbf{Developer Tools:} Git, GitHub Actions, Docker, Kubernetes, AWS, Linux, Jest.\\\\
+\\textbf{Databases \\& Storage:} PostgreSQL, MySQL, Redis, MongoDB.
+
+\\end{document}`,
   'jake-resume': `\\documentclass[letterpaper,11pt]{article}
 
 \\usepackage{latexsym}
@@ -598,11 +736,10 @@ const Dashboard: React.FC = () => {
                   {TEMPLATES.map((tmpl) => (
                     <div
                       key={tmpl.id}
-                      className={`p-3 border-[1.5px] rounded-lg cursor-pointer bg-bg-surface text-left transition-all duration-[120ms] hover:border-brand-green-border hover:bg-bg-sidebar ${
-                        selectedTemplate === tmpl.id
-                          ? 'border-brand-green bg-brand-green-light shadow-[0_0_0_2px_var(--color-brand-green)]'
-                          : 'border-border-subtle'
-                      }`}
+                      className={`p-3 border-[1.5px] rounded-lg cursor-pointer bg-bg-surface text-left transition-all duration-[120ms] hover:border-brand-green-border hover:bg-bg-sidebar ${selectedTemplate === tmpl.id
+                        ? 'border-brand-green bg-brand-green-light shadow-[0_0_0_2px_var(--color-brand-green)]'
+                        : 'border-border-subtle'
+                        }`}
                       onClick={() => setSelectedTemplate(tmpl.id)}
                     >
                       <div className="text-[22px] mb-2">{tmpl.icon}</div>
