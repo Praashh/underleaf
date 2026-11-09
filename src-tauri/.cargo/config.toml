@@ -1,2 +1,3 @@
 [env]
-PKG_CONFIG_PATH = { value = "/opt/homebrew/opt/icu4c/lib/pkgconfig:/opt/homebrew/lib/pkgconfig:/usr/local/lib/pkgconfig", relative = false }
+PKG_CONFIG_PATH_aarch64_apple_darwin = { value = "/opt/homebrew/opt/icu4c/lib/pkgconfig:/opt/homebrew/lib/pkgconfig", relative = false }
+PKG_CONFIG_PATH_x86_64_apple_darwin = { value = "/usr/local/opt/icu4c/lib/pkgconfig:/usr/local/lib/pkgconfig", relative = false }

@@ -19,9 +19,15 @@ A desktop LaTeX editor designed for resume and CV authoring, inspired by Overlea
 
 ## Prerequisites
 
-- Node.js (v18+)
+- Node.js (v20+)
 - Rust (stable toolchain)
-- macOS: `brew install pkg-config icu4c`
+- **macOS**: `brew install pkg-config icu4c`
+- **Linux (Ubuntu/Debian)**:
+  ```bash
+  sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev \
+    librsvg2-dev patchelf libssl-dev pkg-config \
+    libicu-dev libfontconfig1-dev libgraphite2-dev libharfbuzz-dev
+  ```
 
 ## Getting Started
 
@@ -46,5 +52,15 @@ Create a release bundle:
 ```bash
 npm run tauri build
 ```
+
+## Important Notes for Distribution
+
+### First-Time Compilation
+Underleaf uses an embedded Tectonic engine so users do not need MacTeX or TeX Live installed. On the **very first compilation**, Tectonic fetches the standard TeX support bundle (~200MB) via HTTPS. An active internet connection is required only for this initial setup; all subsequent compilations are fully offline and fast.
+
+### macOS Gatekeeper (Unsigned Binaries)
+If downloading an unsigned release binary on macOS, Gatekeeper may display a warning. To open:
+- Right-click (or Control-click) `Underleaf.app` and choose **Open**.
+- Or run in terminal: `xattr -cr /Applications/Underleaf.app`
 
 

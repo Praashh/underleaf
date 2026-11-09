@@ -26,7 +26,7 @@ if (
   };
 }
 
-import React, { useState, useMemo, Suspense, Component, ErrorInfo } from 'react';
+import React, { useState, useEffect, useMemo, Suspense, Component, ErrorInfo } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
@@ -88,6 +88,18 @@ const PdfViewer: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [scale, setScale] = useState<number>(1.0);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [elapsedCompileSec, setElapsedCompileSec] = useState<number>(0);
+
+  useEffect(() => {
+    if (compileStatus !== 'compiling') {
+      setElapsedCompileSec(0);
+      return;
+    }
+    const timer = setInterval(() => {
+      setElapsedCompileSec((s) => s + 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [compileStatus]);
 
   const pdfFile = useMemo(() => {
     if (!pdfData) return null;
@@ -136,8 +148,19 @@ const PdfViewer: React.FC = () => {
           {compileStatus === 'compiling' && !pdfFile && (
             <div className="flex flex-col items-center justify-center h-full w-full text-text-muted gap-3 text-center p-8">
               <div className="compile-spinner" />
-              <h3 className="text-[16px] font-semibold text-[#1e293b]">Compiling…</h3>
-              <p className="text-[13px] text-text-muted max-w-[300px] leading-[1.5]">Generating your document</p>
+              <h3 className="text-[16px] font-semibold text-[#1e293b]">
+                {elapsedCompileSec >= 4 ? 'Setting up TeX engine…' : 'Compiling…'}
+              </h3>
+              <p className="text-[13px] text-text-muted max-w-[340px] leading-[1.5]">
+                {elapsedCompileSec >= 4
+                  ? 'First compilation downloads core LaTeX packages (~200MB) over your internet connection. This may take 30–60 seconds.'
+                  : 'Generating your document'}
+              </p>
+              {elapsedCompileSec >= 5 && (
+                <span className="text-[11.5px] font-mono text-brand-green bg-brand-green/10 px-2.5 py-1 rounded-full mt-2">
+                  Elapsed: {elapsedCompileSec}s
+                </span>
+              )}
             </div>
           )}
 
@@ -145,7 +168,11 @@ const PdfViewer: React.FC = () => {
           {compileStatus === 'compiling' && pdfFile && (
             <div className="sticky top-3 z-50 flex items-center gap-2 bg-white/95 backdrop-blur-lg text-text-primary py-2 px-4.5 rounded-full shadow-[0_4px_16px_rgba(0,0,0,0.12),0_1px_3px_rgba(0,0,0,0.08)] border border-brand-green/25 text-[13px] font-medium mb-4 animate-fade-in-down">
               <div className="compile-spinner-sm" />
-              <span>Compiling document…</span>
+              <span>
+                {elapsedCompileSec >= 4
+                  ? `Compiling & downloading packages… (${elapsedCompileSec}s)`
+                  : 'Compiling document…'}
+              </span>
             </div>
           )}
 

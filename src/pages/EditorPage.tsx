@@ -48,6 +48,18 @@ const EditorPage: React.FC = () => {
   const { currentProject, setCurrentPage } = useProjectStore();
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [showErrors, setShowErrors] = React.useState(false);
+  const [compileElapsed, setCompileElapsed] = React.useState(0);
+
+  useEffect(() => {
+    if (compileStatus !== 'compiling') {
+      setCompileElapsed(0);
+      return;
+    }
+    const timer = setInterval(() => {
+      setCompileElapsed((s) => s + 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [compileStatus]);
 
   // Load project file on mount
   useEffect(() => {
@@ -115,15 +127,34 @@ const EditorPage: React.FC = () => {
       if (result.success && result.pdf_base64) {
         setPdfData(result.pdf_base64);
         setCompileStatus('success');
+        try {
+          localStorage.setItem('underleaf_has_compiled', 'true');
+        } catch {
+          // ignore localStorage errors
+        }
       } else {
-        setCompileErrors(result.errors);
+        const errors = [...result.errors];
+        const hasCompiled = localStorage.getItem('underleaf_has_compiled');
+        if (!hasCompiled) {
+          errors.push(
+            'Note: Initial LaTeX compilation requires an active internet connection to download TeX package bundles (~200MB). Check your connection and click Recompile.'
+          );
+        }
+        setCompileErrors(errors);
         setCompileWarnings(result.warnings);
         setCompileStatus('error');
         setShowErrors(true);
       }
     } catch (err) {
       setCompileStatus('error');
-      setCompileErrors([String(err)]);
+      const errStr = String(err);
+      const errors = [errStr];
+      if (!localStorage.getItem('underleaf_has_compiled')) {
+        errors.push(
+          'Note: Initial LaTeX compilation requires an active internet connection to download TeX package bundles (~200MB). Check your connection and click Recompile.'
+        );
+      }
+      setCompileErrors(errors);
       setCompileTime(null);
       setShowErrors(true);
     }
@@ -318,8 +349,12 @@ const EditorPage: React.FC = () => {
             )}
             {compileStatus === 'compiling' && (
               <>
-                <Loader2 size={11} className="animate-spin" />
-                Compiling…
+                <Loader2 size={11} className="animate-spin text-brand-green" />
+                <span>
+                  {compileElapsed >= 4
+                    ? `Compiling & downloading TeX packages (${compileElapsed}s)…`
+                    : 'Compiling…'}
+                </span>
               </>
             )}
             {compileStatus === 'idle' && (

@@ -45,7 +45,9 @@ jobs:
 
       - name: macOS deps
         if: matrix.platform == 'macos-latest'
-        run: brew install pkg-config icu4c
+        run: |
+          brew install pkg-config icu4c
+          echo "PKG_CONFIG_PATH=$(brew --prefix icu4c)/lib/pkgconfig" >> $GITHUB_ENV
 
       - run: npm ci
 
