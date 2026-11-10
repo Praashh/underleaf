@@ -14,12 +14,18 @@ jobs:
         include:
           - platform: macos-latest
             args: --target aarch64-apple-darwin
+            tectonic_backend: pkg-config
           - platform: macos-15-intel
             args: --target x86_64-apple-darwin
+            tectonic_backend: pkg-config
           - platform: ubuntu-22.04
             args: ""
+            tectonic_backend: pkg-config
           - platform: windows-latest
             args: ""
+            tectonic_backend: vcpkg
+            vcpkg_root: 'C:\vcpkg'
+            vcpkgrs_triplet: x64-windows-static-md
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v4
@@ -55,23 +61,28 @@ jobs:
         uses: actions/cache@v4
         with:
           path: C:\vcpkg\installed
-          key: ${{ runner.os }}-vcpkg-x64-windows-static-md-v1
+          key: ${{ runner.os }}-vcpkg-x64-windows-static-md-v2
+          restore-keys: |
+            ${{ runner.os }}-vcpkg-x64-windows-static-md-
 
       - name: Windows deps (vcpkg for Tectonic)
         if: matrix.platform == 'windows-latest'
-        shell: pwsh
+        shell: bash
         run: |
-          vcpkg install --triplet x64-windows-static-md fontconfig freetype harfbuzz icu libpng graphite2
-          $vcpkgRoot = if ($env:VCPKG_INSTALLATION_ROOT) { $env:VCPKG_INSTALLATION_ROOT } else { "C:\vcpkg" }
-          echo "TECTONIC_DEP_BACKEND=vcpkg" >> $env:GITHUB_ENV
-          echo "VCPKG_ROOT=$vcpkgRoot" >> $env:GITHUB_ENV
-          echo "VCPKGRS_TRIPLET=x64-windows-static-md" >> $env:GITHUB_ENV
+          vcpkg install --triplet x64-windows-static-md --clean-after-build \
+            fontconfig freetype "harfbuzz[graphite2]" icu libpng graphite2
+          echo "TECTONIC_DEP_BACKEND=vcpkg" >> "$GITHUB_ENV"
+          echo 'VCPKG_ROOT=C:\vcpkg' >> "$GITHUB_ENV"
+          echo "VCPKGRS_TRIPLET=x64-windows-static-md" >> "$GITHUB_ENV"
 
       - run: npm ci
 
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TECTONIC_DEP_BACKEND: ${{ matrix.tectonic_backend }}
+          VCPKG_ROOT: ${{ matrix.vcpkg_root || '' }}
+          VCPKGRS_TRIPLET: ${{ matrix.vcpkgrs_triplet || '' }}
         with:
           tagName: v__VERSION__
           releaseName: "Underleaf v__VERSION__"
