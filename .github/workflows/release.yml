@@ -84,9 +84,9 @@ jobs:
           VCPKG_ROOT: ${{ matrix.vcpkg_root || '' }}
           VCPKGRS_TRIPLET: ${{ matrix.vcpkgrs_triplet || '' }}
         with:
-          tagName: v__VERSION__
-          releaseName: "Underleaf v__VERSION__"
+          tagName: ${{ github.ref_name }}
+          releaseName: "Underleaf ${{ github.ref_name }}"
           releaseBody: "Download the installer for your OS below."
-          releaseDraft: true
+          releaseDraft: false
           prerelease: false
           args: ${{ matrix.args }}
