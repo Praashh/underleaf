@@ -13,13 +13,17 @@ import {
   AlertTriangle,
   ChevronDown,
   Clock,
+  Sparkles,
 } from 'lucide-react';
 import LatexEditor from '../components/Editor/LatexEditor';
 import VisualEditor from '../components/Editor/VisualEditor';
 import EditorToolbar from '../components/Editor/EditorToolbar';
 import PdfViewer from '../components/Preview/PdfViewer';
+import { AiAssistantPanel } from '../components/AI/AiAssistantPanel';
+import { AiSettingsModal } from '../components/Settings/AiSettingsModal';
 import { useEditorStore } from '../store/editorStore';
 import { useProjectStore } from '../store/projectStore';
+import { useAISettingsStore } from '../store/aiSettingsStore';
 import {
   compileLatex,
   readProjectFile,
@@ -46,6 +50,8 @@ const EditorPage: React.FC = () => {
   } = useEditorStore();
 
   const { currentProject, setCurrentPage } = useProjectStore();
+  const { isAiPanelOpen, toggleAiPanel, setIsAiPanelOpen } = useAISettingsStore();
+  const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [showErrors, setShowErrors] = React.useState(false);
   const [compileElapsed, setCompileElapsed] = React.useState(0);
@@ -252,7 +258,20 @@ const EditorPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            className={`flex items-center gap-1.5 py-1.5 px-3 rounded-md text-[12px] font-medium transition-all cursor-pointer ${
+              isAiPanelOpen
+                ? 'bg-white text-brand-green font-semibold shadow-xs'
+                : 'bg-white/15 text-white hover:bg-white/25'
+            }`}
+            onClick={toggleAiPanel}
+            title="Toggle AI Copilot"
+          >
+            <Sparkles size={14} className={isAiPanelOpen ? 'text-brand-green' : 'text-yellow-300'} />
+            <span>AI Copilot</span>
+          </button>
+
           {compileTime !== null && compileStatus === 'success' && (
             <span className="flex items-center gap-[5px] text-[11px] text-white/85 tabular-nums bg-black/20 py-[3px] px-2 rounded-full">
               <Clock size={12} />
@@ -273,8 +292,16 @@ const EditorPage: React.FC = () => {
 
       {/* Main split view */}
       <div className="flex-1 overflow-hidden bg-bg-surface">
-        <PanelGroup orientation="horizontal" className="h-full">
-          <Panel defaultSize={50} minSize={25} className="h-full min-h-0 overflow-hidden">
+        <PanelGroup
+          key={isAiPanelOpen ? 'layout-ai-open' : 'layout-ai-closed'}
+          orientation="horizontal"
+          className="h-full"
+        >
+          <Panel
+            defaultSize={isAiPanelOpen ? '38%' : '50%'}
+            minSize="20%"
+            className="h-full min-h-0 overflow-hidden"
+          >
             <div className="flex flex-col h-full min-h-0 border-r border-border-subtle">
               <EditorToolbar onAction={handleFormatAction} />
               <div className="flex-1 min-h-0 h-full overflow-hidden bg-white flex flex-col relative">
@@ -303,12 +330,21 @@ const EditorPage: React.FC = () => {
                         {compileErrors.length > 1 ? 's' : ''}
                       </span>
                     </div>
-                    <button
-                      className="btn btn-ghost btn-sm"
-                      onClick={() => setShowErrors(false)}
-                    >
-                      ✕
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-[11px] font-semibold bg-white text-error border border-error-border shadow-2xs hover:bg-red-50 transition-colors cursor-pointer"
+                        onClick={() => setIsAiPanelOpen(true)}
+                      >
+                        <Sparkles size={12} className="text-brand-green" />
+                        Fix with AI
+                      </button>
+                      <button
+                        className="btn btn-ghost btn-sm"
+                        onClick={() => setShowErrors(false)}
+                      >
+                        ✕
+                      </button>
+                    </div>
                   </div>
                   <div className="overflow-y-auto py-2 px-3.5">
                     {compileErrors.map((err, i) => (
@@ -325,11 +361,35 @@ const EditorPage: React.FC = () => {
 
           <PanelResizeHandle className="resize-handle" />
 
-          <Panel defaultSize={50} minSize={25} className="h-full min-h-0 overflow-hidden">
+          <Panel
+            defaultSize={isAiPanelOpen ? '34%' : '50%'}
+            minSize="20%"
+            className="h-full min-h-0 overflow-hidden"
+          >
             <PdfViewer />
           </Panel>
+
+          {isAiPanelOpen && (
+            <>
+              <PanelResizeHandle className="resize-handle" />
+              <Panel
+                defaultSize="28%"
+                minSize="20%"
+                maxSize="50%"
+                className="h-full min-h-0 overflow-hidden"
+              >
+                <AiAssistantPanel
+                  onOpenSettings={() => setIsSettingsOpen(true)}
+                  editorView={editorViewRef.current}
+                />
+              </Panel>
+            </>
+          )}
         </PanelGroup>
       </div>
+
+      {/* AI Settings Modal */}
+      <AiSettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
 
       {/* Status bar */}
       <footer className="flex items-center justify-between px-4 py-[3px] bg-bg-sidebar border-t border-border-subtle min-h-[24px] text-text-muted text-[11.5px] select-none">

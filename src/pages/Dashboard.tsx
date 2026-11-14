@@ -8,9 +8,11 @@ import {
   Search,
   Leaf,
   Loader2,
+  Sparkles,
 } from 'lucide-react';
 import { useProjectStore, ProjectMeta } from '../store/projectStore';
 import { useEditorStore } from '../store/editorStore';
+import { AiSettingsModal } from '../components/Settings/AiSettingsModal';
 import {
   listProjects,
   createProject,
@@ -439,6 +441,7 @@ const Dashboard: React.FC = () => {
   const [renameName, setRenameName] = useState('');
   const [deleteModal, setDeleteModal] = useState<ProjectMeta | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   useEffect(() => {
     loadProjects();
@@ -542,6 +545,17 @@ const Dashboard: React.FC = () => {
             <Leaf size={18} />
           </div>
           <span className="text-[17px] font-bold -tracking-[0.02em] text-white">Underleaf</span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setIsSettingsOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[12px] font-medium bg-white/15 text-white hover:bg-white/25 transition-all cursor-pointer"
+            title="Configure AI Providers"
+          >
+            <Sparkles size={14} className="text-yellow-300" />
+            <span>AI Settings</span>
+          </button>
         </div>
       </header>
 
@@ -873,6 +887,9 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* AI Settings Modal */}
+      <AiSettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
     </div>
   );
 };

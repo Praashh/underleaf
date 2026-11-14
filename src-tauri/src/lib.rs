@@ -1,11 +1,14 @@
 mod commands;
+mod state;
 
+use commands::ai::{ai_apply, ai_available, ai_cancel, ai_stream};
 use commands::compile::compile_latex;
 use commands::export::{export_pdf, get_pdf_bytes};
 use commands::project::{
     create_project, delete_project, list_projects, read_project_file, rename_project,
     save_project_file,
 };
+use state::AppState;
 
 #[cfg(target_os = "macos")]
 fn set_macos_dock_icon() {
@@ -27,7 +30,9 @@ fn set_macos_dock_icon() {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    let state = AppState::default();
     tauri::Builder::default()
+        .manage(state)
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_fs::init())
@@ -41,6 +46,10 @@ pub fn run() {
             rename_project,
             export_pdf,
             get_pdf_bytes,
+            ai_available,
+            ai_stream,
+            ai_cancel,
+            ai_apply,
         ])
         .setup(|_app| {
             #[cfg(target_os = "macos")]

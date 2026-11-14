@@ -14,8 +14,10 @@ import {
   Redo2,
   Edit2,
   Eye,
+  Sparkles,
 } from 'lucide-react';
 import { useEditorStore } from '../../store/editorStore';
+import { useAISettingsStore } from '../../store/aiSettingsStore';
 
 interface ToolbarButtonProps {
   icon: React.ReactNode;
@@ -45,6 +47,7 @@ interface EditorToolbarProps {
 
 const EditorToolbar: React.FC<EditorToolbarProps> = ({ onAction }) => {
   const { editorMode, setEditorMode } = useEditorStore();
+  const { isAiPanelOpen, toggleAiPanel } = useAISettingsStore();
 
   return (
     <div className="flex items-center px-3 py-1.5 bg-bg-sidebar border-b border-border-subtle gap-1.5 min-h-[40px] overflow-x-auto select-none">
@@ -164,6 +167,21 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ onAction }) => {
       </div>
 
       <div className="flex-1" />
+
+      {/* AI Copilot shortcut */}
+      <button
+        type="button"
+        onClick={toggleAiPanel}
+        className={`inline-flex items-center gap-1.5 py-1 px-2.5 rounded text-[11.5px] font-medium transition-colors cursor-pointer ${
+          isAiPanelOpen
+            ? 'bg-brand-green text-white font-semibold shadow-2xs'
+            : 'bg-brand-green/10 text-brand-green hover:bg-brand-green/20'
+        }`}
+        title="Toggle AI Copilot"
+      >
+        <Sparkles size={12} />
+        <span>AI Assist</span>
+      </button>
 
       {/* Mode / Editing indicator */}
       <div className="inline-flex items-center gap-[5px] py-[3px] px-2 bg-bg-subtle border border-border-subtle rounded-xl text-[11.5px] text-text-muted font-medium">
