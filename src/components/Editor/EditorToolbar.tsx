@@ -55,11 +55,10 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ onAction }) => {
       <div className="flex bg-bg-hover rounded-md p-0.5 gap-0.5">
         <button
           type="button"
-          className={`inline-flex items-center py-1 px-2.5 border-none rounded text-[12px] font-medium cursor-pointer transition-all duration-150 ${
-            editorMode === 'code'
+          className={`inline-flex items-center py-1 px-2.5 border-none rounded text-[12px] font-medium cursor-pointer transition-all duration-150 ${editorMode === 'code'
               ? 'bg-white text-text-primary font-semibold shadow-sm'
               : 'bg-transparent text-text-muted hover:text-text-primary'
-          }`}
+            }`}
           onClick={() => setEditorMode('code')}
         >
           <Code size={13} style={{ marginRight: '4px', verticalAlign: '-2px' }} />
@@ -67,11 +66,10 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ onAction }) => {
         </button>
         <button
           type="button"
-          className={`inline-flex items-center py-1 px-2.5 border-none rounded text-[12px] font-medium cursor-pointer transition-all duration-150 ${
-            editorMode === 'visual'
+          className={`inline-flex items-center py-1 px-2.5 border-none rounded text-[12px] font-medium cursor-pointer transition-all duration-150 ${editorMode === 'visual'
               ? 'bg-white text-text-primary font-semibold shadow-sm'
               : 'bg-transparent text-text-muted hover:text-text-primary'
-          }`}
+            }`}
           onClick={() => setEditorMode('visual')}
         >
           <Eye size={13} style={{ marginRight: '4px', verticalAlign: '-2px' }} />
@@ -168,16 +166,15 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ onAction }) => {
 
       <div className="flex-1" />
 
-      {/* AI Copilot shortcut */}
+      {/* voyager shortcut */}
       <button
         type="button"
         onClick={toggleAiPanel}
-        className={`inline-flex items-center gap-1.5 py-1 px-2.5 rounded text-[11.5px] font-medium transition-colors cursor-pointer ${
-          isAiPanelOpen
+        className={`inline-flex items-center gap-1.5 py-1 px-2.5 rounded text-[11.5px] font-medium transition-colors cursor-pointer ${isAiPanelOpen
             ? 'bg-brand-green text-white font-semibold shadow-2xs'
             : 'bg-brand-green/10 text-brand-green hover:bg-brand-green/20'
-        }`}
-        title="Toggle AI Copilot"
+          }`}
+        title="Toggle voyager"
       >
         <Sparkles size={12} />
         <span>AI Assist</span>

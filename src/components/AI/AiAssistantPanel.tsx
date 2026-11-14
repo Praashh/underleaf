@@ -118,9 +118,9 @@ export const AiAssistantPanel: React.FC<AiAssistantPanelProps> = ({
             prev.map((msg) =>
               msg.id === assistantMessageId
                 ? {
-                    ...msg,
-                    text: accumulatedText,
-                  }
+                  ...msg,
+                  text: accumulatedText,
+                }
                 : msg
             )
           );
@@ -130,9 +130,9 @@ export const AiAssistantPanel: React.FC<AiAssistantPanelProps> = ({
             prev.map((msg) =>
               msg.id === assistantMessageId
                 ? {
-                    ...msg,
-                    progress,
-                  }
+                  ...msg,
+                  progress,
+                }
                 : msg
             )
           );
@@ -144,11 +144,11 @@ export const AiAssistantPanel: React.FC<AiAssistantPanelProps> = ({
             prev.map((msg) =>
               msg.id === assistantMessageId
                 ? {
-                    ...msg,
-                    text: prose,
-                    actions: actions.length > 0 ? actions : undefined,
-                    isStreaming: false,
-                  }
+                  ...msg,
+                  text: prose,
+                  actions: actions.length > 0 ? actions : undefined,
+                  isStreaming: false,
+                }
                 : msg
             )
           );
@@ -160,10 +160,10 @@ export const AiAssistantPanel: React.FC<AiAssistantPanelProps> = ({
             prev.map((msg) =>
               msg.id === assistantMessageId
                 ? {
-                    ...msg,
-                    text: `⚠️ **Error**: ${err}`,
-                    isStreaming: false,
-                  }
+                  ...msg,
+                  text: `⚠️ **Error**: ${err}`,
+                  isStreaming: false,
+                }
                 : msg
             )
           );
@@ -242,7 +242,7 @@ export const AiAssistantPanel: React.FC<AiAssistantPanelProps> = ({
             <Sparkles size={14} />
           </div>
           <div>
-            <span className="font-semibold text-text-primary text-[12.5px]">AI Copilot</span>
+            <span className="font-semibold text-text-primary text-[12.5px]">Voyager AI</span>
             <span className="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] bg-bg-app border border-border-subtle font-mono text-text-secondary">
               {currentProviderMeta?.name || provider}
             </span>
@@ -328,16 +328,14 @@ export const AiAssistantPanel: React.FC<AiAssistantPanelProps> = ({
           messages.map((msg) => (
             <div
               key={msg.id}
-              className={`flex flex-col ${
-                msg.sender === 'user' ? 'items-end' : 'items-start'
-              }`}
+              className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'
+                }`}
             >
               <div
-                className={`max-w-[92%] rounded-xl px-3.5 py-2.5 leading-relaxed text-[12.5px] whitespace-pre-wrap select-text ${
-                  msg.sender === 'user'
-                    ? 'bg-brand-green text-white rounded-br-xs shadow-xs'
-                    : 'bg-bg-sidebar border border-border-subtle text-text-primary rounded-bl-xs'
-                }`}
+                className={`max-w-[92%] rounded-xl px-3.5 py-2.5 leading-relaxed text-[12.5px] whitespace-pre-wrap select-text ${msg.sender === 'user'
+                  ? 'bg-brand-green text-white rounded-br-xs shadow-xs'
+                  : 'bg-bg-sidebar border border-border-subtle text-text-primary rounded-bl-xs'
+                  }`}
               >
                 {msg.text || (
                   <span className="flex items-center gap-1.5 text-text-muted text-[12px]">
@@ -437,7 +435,7 @@ export const AiAssistantPanel: React.FC<AiAssistantPanelProps> = ({
                 handleSendMessage();
               }
             }}
-            placeholder="Ask AI Copilot (e.g. improve bullets, fix syntax)..."
+            placeholder="Ask voyager (e.g. improve bullets, fix syntax)..."
             rows={2}
             className="flex-1 p-2 bg-white border border-border-subtle rounded-lg text-[12.5px] resize-none focus:outline-none focus:border-brand-green leading-snug"
           />

@@ -260,16 +260,15 @@ const EditorPage: React.FC = () => {
 
         <div className="flex items-center gap-2 shrink-0">
           <button
-            className={`flex items-center gap-1.5 py-1.5 px-3 rounded-md text-[12px] font-medium transition-all cursor-pointer ${
-              isAiPanelOpen
-                ? 'bg-white text-brand-green font-semibold shadow-xs'
-                : 'bg-white/15 text-white hover:bg-white/25'
-            }`}
+            className={`flex items-center gap-1.5 py-1.5 px-3 rounded-md text-[12px] font-medium transition-all cursor-pointer ${isAiPanelOpen
+              ? 'bg-white text-brand-green font-semibold shadow-xs'
+              : 'bg-white/15 text-white hover:bg-white/25'
+              }`}
             onClick={toggleAiPanel}
-            title="Toggle AI Copilot"
+            title="Toggle Voyager"
           >
             <Sparkles size={14} className={isAiPanelOpen ? 'text-brand-green' : 'text-yellow-300'} />
-            <span>AI Copilot</span>
+            <span>Voyager AI</span>
           </button>
 
           {compileTime !== null && compileStatus === 'success' && (
