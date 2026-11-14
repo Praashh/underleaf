@@ -17,6 +17,7 @@ import { useAISettingsStore, PROVIDERS_LIST } from '../../store/aiSettingsStore'
 import { startAiStream, AiProgressPayload } from '../../utils/ai';
 import { buildChatPrompt } from '../../utils/aiPrompts';
 import { parseAiActions, AiAction } from '../../utils/aiActions';
+import { MarkdownRenderer } from '../Common/MarkdownRenderer';
 import { EditorView } from '@codemirror/view';
 
 interface Message {
@@ -332,12 +333,18 @@ export const AiAssistantPanel: React.FC<AiAssistantPanelProps> = ({
                 }`}
             >
               <div
-                className={`max-w-[92%] rounded-xl px-3.5 py-2.5 leading-relaxed text-[12.5px] whitespace-pre-wrap select-text ${msg.sender === 'user'
-                  ? 'bg-brand-green text-white rounded-br-xs shadow-xs'
-                  : 'bg-bg-sidebar border border-border-subtle text-text-primary rounded-bl-xs'
+                className={`max-w-[92%] rounded-xl px-3.5 py-2.5 leading-relaxed text-[12.5px] select-text ${msg.sender === 'user'
+                    ? 'bg-brand-green text-white rounded-br-xs shadow-xs whitespace-pre-wrap'
+                    : 'bg-bg-sidebar border border-border-subtle text-text-primary rounded-bl-xs'
                   }`}
               >
-                {msg.text || (
+                {msg.text ? (
+                  msg.sender === 'assistant' ? (
+                    <MarkdownRenderer>{msg.text}</MarkdownRenderer>
+                  ) : (
+                    <span>{msg.text}</span>
+                  )
+                ) : (
                   <span className="flex items-center gap-1.5 text-text-muted text-[12px]">
                     <Loader2 size={12} className="animate-spin" />
                     Thinking…
