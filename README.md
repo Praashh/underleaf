@@ -31,7 +31,7 @@ A desktop LaTeX editor designed for resume and CV authoring, inspired by Overlea
 
 ### Option 1: Pre-built Binaries (Recommended)
 
-Download the latest release for your platform from the [GitHub Releases](https://github.com/prashantvarma/underleaf/releases) page.
+Download the latest release for your platform from the [GitHub Releases](https://github.com/Praashh/underleaf/releases) page.
 
 #### macOS (.dmg)
 1. Download `Underleaf_x.x.x_aarch64.dmg` (Apple Silicon M1/M2/M3/M4) or `Underleaf_x.x.x_x64.dmg` (Intel).
@@ -99,7 +99,7 @@ Download the latest release for your platform from the [GitHub Releases](https:/
 #### 2. Clone and Install Dependencies
 
 ```bash
-git clone https://github.com/prashantvarma/underleaf.git
+git clone https://github.com/Praashh/underleaf.git
 cd underleaf
 npm install
 ```
