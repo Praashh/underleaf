@@ -14,6 +14,7 @@ import {
   ChevronDown,
   Clock,
   Sparkles,
+  FileText,
 } from 'lucide-react';
 import LatexEditor from '../components/Editor/LatexEditor';
 import VisualEditor from '../components/Editor/VisualEditor';
@@ -251,7 +252,7 @@ const EditorPage: React.FC = () => {
               {currentProject?.name || 'Untitled'}
             </span>
             <span className="inline-flex items-center gap-1.5 py-[3px] px-2.5 bg-black/20 rounded text-[11px] text-white/90 font-mono">
-              <span className="text-[12px]">📄</span>
+              <FileText size={12} className="opacity-80" />
               main.tex
               {isDirty && <span className="inline-block w-1.5 h-1.5 rounded-full bg-yellow-300" />}
             </span>

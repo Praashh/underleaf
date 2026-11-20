@@ -32,6 +32,7 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import { useEditorStore } from '../../store/editorStore';
 import PdfToolbar from './PdfToolbar';
+import { FileText } from 'lucide-react';
 
 // Configure PDF.js worker
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -138,7 +139,9 @@ const PdfViewer: React.FC = () => {
           {/* Initial state before compilation */}
           {!pdfFile && compileStatus === 'idle' && (
             <div className="flex flex-col items-center justify-center h-full w-full text-text-muted gap-3 text-center p-8">
-              <div className="text-[40px] mb-1">📄</div>
+              <div className="w-14 h-14 rounded-2xl bg-bg-surface border border-border-medium/60 shadow-xs flex items-center justify-center text-text-muted mb-1">
+                <FileText size={28} strokeWidth={1.75} />
+              </div>
               <h3 className="text-[16px] font-semibold text-[#1e293b]">No PDF Preview</h3>
               <p className="text-[13px] text-text-muted max-w-[300px] leading-[1.5]">Click <strong>Recompile</strong> to generate the PDF preview</p>
             </div>

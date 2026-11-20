@@ -10,6 +10,7 @@ import {
   AlertCircle,
   Loader2,
   ChevronRight,
+  BarChart3,
 } from 'lucide-react';
 import { useEditorStore } from '../../store/editorStore';
 import { useProjectStore } from '../../store/projectStore';
@@ -290,7 +291,10 @@ export const AiAssistantPanel: React.FC<AiAssistantPanelProps> = ({
                   handleSendMessage('Review my current resume and suggest 3 high-impact improvements.')
                 }
               >
-                <span>✨ Review resume & suggest improvements</span>
+                <span className="flex items-center gap-2">
+                  <Sparkles size={13} className="text-amber-500 shrink-0" />
+                  Review resume & suggest improvements
+                </span>
                 <ChevronRight size={13} className="text-text-muted" />
               </button>
 
@@ -302,7 +306,10 @@ export const AiAssistantPanel: React.FC<AiAssistantPanelProps> = ({
                   )
                 }
               >
-                <span>📊 Quantify bullets with STAR method</span>
+                <span className="flex items-center gap-2">
+                  <BarChart3 size={13} className="text-brand-green shrink-0" />
+                  Quantify bullets with STAR method
+                </span>
                 <ChevronRight size={13} className="text-text-muted" />
               </button>
 

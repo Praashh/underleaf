@@ -9,6 +9,10 @@ import {
   Leaf,
   Loader2,
   Sparkles,
+  Briefcase,
+  GraduationCap,
+  User,
+  type LucideIcon,
 } from 'lucide-react';
 import { useProjectStore, ProjectMeta } from '../store/projectStore';
 import { useEditorStore } from '../store/editorStore';
@@ -20,37 +24,44 @@ import {
   renameProject as renameProjectApi,
 } from '../utils/tauri';
 
+interface Template {
+  id: string;
+  name: string;
+  description: string;
+  icon: LucideIcon;
+}
+
 // Resume templates
-const TEMPLATES = [
+const TEMPLATES: Template[] = [
   {
     id: 'blank',
     name: 'Blank Project',
     description: 'Start from scratch with a basic document structure',
-    icon: '📄',
+    icon: FileText,
   },
   {
     id: 'jake-resume',
     name: "Jake's Resume",
     description: 'Classic single-column professional resume',
-    icon: '📋',
+    icon: Briefcase,
   },
   {
     id: 'modern-cv',
     name: 'Modern CV',
     description: 'Clean two-column layout with sidebar',
-    icon: '✨',
+    icon: Sparkles,
   },
   {
     id: 'academic-cv',
     name: 'Academic CV',
     description: 'Publication-focused academic curriculum vitae',
-    icon: '🎓',
+    icon: GraduationCap,
   },
   {
     id: 'john-doe',
     name: 'John Doe Resume',
     description: 'Minimalist single-column layout with clean rules',
-    icon: '👤',
+    icon: User,
   },
 ];
 
@@ -747,20 +758,33 @@ const Dashboard: React.FC = () => {
               <div className="mb-4">
                 <label className="block text-[12.5px] font-medium text-text-secondary mb-1.5">Choose a Template</label>
                 <div className="grid grid-cols-2 gap-3 mt-2">
-                  {TEMPLATES.map((tmpl) => (
-                    <div
-                      key={tmpl.id}
-                      className={`p-3 border-[1.5px] rounded-lg cursor-pointer bg-bg-surface text-left transition-all duration-[120ms] hover:border-brand-green-border hover:bg-bg-sidebar ${selectedTemplate === tmpl.id
-                        ? 'border-brand-green bg-brand-green-light shadow-[0_0_0_2px_var(--color-brand-green)]'
-                        : 'border-border-subtle'
+                  {TEMPLATES.map((tmpl) => {
+                    const IconComponent = tmpl.icon;
+                    const isSelected = selectedTemplate === tmpl.id;
+                    return (
+                      <div
+                        key={tmpl.id}
+                        className={`group p-3 border-[1.5px] rounded-lg cursor-pointer text-left transition-all duration-[120ms] ${
+                          isSelected
+                            ? 'border-brand-green bg-brand-green-light shadow-[0_0_0_2px_var(--color-brand-green)]'
+                            : 'border-border-subtle bg-bg-surface hover:border-brand-green-border hover:bg-bg-sidebar'
                         }`}
-                      onClick={() => setSelectedTemplate(tmpl.id)}
-                    >
-                      <div className="text-[22px] mb-2">{tmpl.icon}</div>
-                      <div className="font-semibold text-[12.5px] text-text-primary mb-[3px]">{tmpl.name}</div>
-                      <div className="text-[11.5px] text-text-muted leading-[1.4]">{tmpl.description}</div>
-                    </div>
-                  ))}
+                        onClick={() => setSelectedTemplate(tmpl.id)}
+                      >
+                        <div
+                          className={`w-8 h-8 rounded-md flex items-center justify-center mb-2.5 transition-colors ${
+                            isSelected
+                              ? 'bg-brand-green text-white shadow-xs'
+                              : 'bg-bg-subtle text-text-secondary group-hover:bg-brand-green-light group-hover:text-brand-green'
+                          }`}
+                        >
+                          <IconComponent size={17} strokeWidth={2} />
+                        </div>
+                        <div className="font-semibold text-[12.5px] text-text-primary mb-[3px]">{tmpl.name}</div>
+                        <div className="text-[11.5px] text-text-muted leading-[1.4]">{tmpl.description}</div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
