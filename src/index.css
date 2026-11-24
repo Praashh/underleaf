@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* ─── Bundled Fonts (offline-ready) ──────────────────────────────── */
 @font-face {
@@ -19,6 +20,7 @@
 
 @theme {
   /* Brand: Overleaf Signature British Forest Green */
+  --color-brand-header: #026046;
   --color-brand-green-dark: #013f2e;
   --color-brand-green: #026046;
   --color-brand-green-hover: #037354;
@@ -84,6 +86,64 @@
   --animate-modal-fade-in: modalFadeIn 150ms ease-out;
   --animate-modal-scale-up: modalScaleUp 180ms cubic-bezier(0.16, 1, 0.3, 1);
   --animate-fade-in-down: fadeInDown 0.2s ease-out;
+}
+
+:root.dark {
+  /* Brand */
+  --color-brand-header: #043d2e;
+  --color-brand-green-dark: #34d399;
+  --color-brand-green: #059669;
+  --color-brand-green-hover: #047857;
+  --color-brand-green-light: rgba(16, 185, 129, 0.14);
+  --color-brand-green-border: rgba(52, 211, 153, 0.35);
+
+  /* Accent Button Green */
+  --color-accent-btn: #16a34a;
+  --color-accent-btn-hover: #15803d;
+  --color-accent-btn-active: #166534;
+
+  /* Surface & Canvas Colors */
+  --color-bg-app: #0d1117;
+  --color-bg-desk: #090d12;
+  --color-bg-surface: #161b22;
+  --color-bg-sidebar: #11161d;
+  --color-bg-subtle: #1c232d;
+  --color-bg-hover: #242d3a;
+  --color-bg-active: #2e3948;
+
+  /* Text Colors */
+  --color-text-primary: #e6edf3;
+  --color-text-secondary: #a8b5c5;
+  --color-text-muted: #7d8b9d;
+  --color-text-inverse: #ffffff;
+  --color-text-brand: #34d399;
+
+  /* Status Colors */
+  --color-success: #4ade80;
+  --color-success-bg: rgba(34, 197, 94, 0.14);
+  --color-success-border: rgba(74, 222, 128, 0.35);
+
+  --color-error: #f87171;
+  --color-error-bg: rgba(239, 68, 68, 0.14);
+  --color-error-border: rgba(248, 113, 113, 0.35);
+
+  --color-warning: #fbbf24;
+  --color-warning-bg: rgba(245, 158, 11, 0.14);
+  --color-warning-border: rgba(251, 191, 36, 0.35);
+
+  --color-info: #38bdf8;
+  --color-info-bg: rgba(56, 189, 248, 0.14);
+
+  /* Borders & Dividers */
+  --color-border-subtle: #242d3a;
+  --color-border-medium: #334155;
+  --color-border-strong: #475569;
+  --color-border-brand: #10b981;
+
+  /* Shadows */
+  --shadow-paper: 0 6px 24px rgba(0, 0, 0, 0.45), 0 1px 4px rgba(0, 0, 0, 0.35);
+  --shadow-modal:
+    0 24px 36px -6px rgba(0, 0, 0, 0.6), 0 10px 14px -6px rgba(0, 0, 0, 0.45);
 }
 
 @keyframes modalFadeIn {
@@ -198,6 +258,9 @@
     @apply text-text-primary;
     background-color: rgba(0, 0, 0, 0.05);
   }
+  :root.dark .btn-ghost:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
 
   .btn-danger {
     @apply bg-error-bg border-error-border;
@@ -206,6 +269,13 @@
   .btn-danger:hover {
     background-color: #fecaca;
     color: #991b1b;
+  }
+  :root.dark .btn-danger {
+    color: #fca5a5;
+  }
+  :root.dark .btn-danger:hover {
+    background-color: rgba(239, 68, 68, 0.25);
+    color: #fecaca;
   }
 
   .btn-icon {
@@ -226,7 +296,7 @@
     width: 28px;
     height: 28px;
     background: transparent;
-    color: #475569;
+    color: var(--color-text-secondary);
     transition: all 0.15s ease;
   }
   .toolbar-btn:hover:not(:disabled) {
@@ -269,11 +339,15 @@
 
   /* ── CodeMirror Overrides (LatexEditor) ── */
   .latex-editor {
-    @apply h-full w-full min-h-0 flex flex-col bg-white overflow-hidden;
+    @apply h-full w-full min-h-0 flex flex-col bg-bg-surface overflow-hidden;
+  }
+  :root.dark .latex-editor {
+    background-color: #0d1117;
   }
 
   .latex-editor .latex-codemirror-wrapper,
   .latex-editor .cm-theme-light,
+  .latex-editor .cm-theme-dark,
   .latex-editor .cm-theme,
   .latex-editor > div {
     height: 100% !important;
@@ -293,6 +367,10 @@
     font-size: 13.5px;
     background-color: #ffffff;
     color: #111827;
+  }
+  :root.dark .latex-editor .cm-editor {
+    background-color: #0d1117;
+    color: #e6edf3;
   }
 
   .latex-editor .cm-scroller {
@@ -322,6 +400,15 @@
   .latex-editor .cm-scroller::-webkit-scrollbar-thumb:hover {
     background: #94a3b8;
   }
+  :root.dark .latex-editor .cm-scroller::-webkit-scrollbar-track {
+    background: #11161d;
+  }
+  :root.dark .latex-editor .cm-scroller::-webkit-scrollbar-thumb {
+    background: #334155;
+  }
+  :root.dark .latex-editor .cm-scroller::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+  }
 
   .latex-editor .cm-gutters {
     background-color: #f8fafc;
@@ -332,11 +419,19 @@
     font-family: var(--font-mono);
     user-select: none;
   }
+  :root.dark .latex-editor .cm-gutters {
+    background-color: #11161d;
+    color: #64748b;
+    border-right-color: #242d3a;
+  }
 
   .latex-editor .cm-lineNumbers .cm-gutterElement {
     padding: 0 8px 0 4px;
     min-width: 30px;
     text-align: right;
+    color: #64748b;
+  }
+  :root.dark .latex-editor .cm-lineNumbers .cm-gutterElement {
     color: #64748b;
   }
 
@@ -345,29 +440,50 @@
     color: #1e293b;
     font-weight: 600;
   }
+  :root.dark .latex-editor .cm-activeLineGutter {
+    background-color: #1c2533;
+    color: #e6edf3;
+  }
 
   .latex-editor .cm-activeLine {
     background-color: #f8fafc;
+  }
+  :root.dark .latex-editor .cm-activeLine {
+    background-color: #151c27;
   }
 
   .latex-editor .cm-cursor {
     border-left-color: #0f172a;
     border-left-width: 2px;
   }
+  :root.dark .latex-editor .cm-cursor {
+    border-left-color: #e6edf3;
+  }
 
   .latex-editor .cm-selectionBackground,
   .latex-editor ::selection {
     background-color: #c7d2fe !important;
   }
+  :root.dark .latex-editor .cm-selectionBackground,
+  :root.dark .latex-editor ::selection {
+    background-color: rgba(56, 189, 248, 0.22) !important;
+  }
 
   .latex-editor.cm-focused .cm-selectionBackground {
     background-color: #bae6fd !important;
+  }
+  :root.dark .latex-editor .cm-focused .cm-selectionBackground {
+    background-color: rgba(56, 189, 248, 0.28) !important;
   }
 
   .latex-editor .cm-matchingBracket {
     background-color: #e0f2fe;
     color: #0369a1 !important;
     font-weight: 600;
+  }
+  :root.dark .latex-editor .cm-matchingBracket {
+    background-color: rgba(56, 189, 248, 0.22);
+    color: #7dd3fc !important;
   }
 
   .cm-warning-gutter-marker {
@@ -391,7 +507,7 @@
     @apply bg-bg-subtle border-border-medium;
   }
   .visual-inline-input:focus {
-    @apply bg-white;
+    @apply bg-bg-surface;
     border-color: #3b82f6;
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
   }
@@ -399,7 +515,7 @@
   /* ── Resize Handle ── */
   .resize-handle {
     width: 5px;
-    background: #e2e8f0;
+    background: var(--color-border-subtle);
     transition: background 0.15s ease;
     position: relative;
     cursor: col-resize;
@@ -420,8 +536,8 @@
   /* ── Compile Spinners ── */
   .compile-spinner {
     @apply w-8 h-8 rounded-full;
-    border: 3px solid #cbd5e1;
-    border-top-color: #026046;
+    border: 3px solid var(--color-border-medium);
+    border-top-color: var(--color-text-brand);
     animation: spin 0.8s linear infinite;
   }
 
@@ -429,8 +545,8 @@
     @apply rounded-full;
     width: 14px;
     height: 14px;
-    border: 2px solid #cbd5e1;
-    border-top-color: #026046;
+    border: 2px solid var(--color-border-medium);
+    border-top-color: var(--color-text-brand);
     animation: spin 0.7s linear infinite;
   }
 
@@ -453,19 +569,23 @@
     font-family: var(--font-sans);
     font-size: 14.5px;
     line-height: 1.85;
-    color: #1e293b;
+    color: var(--color-text-primary);
     padding: 0;
   }
   .visual-editor-cm .cm-line {
     padding: 2px 0;
   }
   .visual-editor-cm .cm-cursor {
-    border-left-color: #0f172a;
+    border-left-color: var(--color-text-primary);
     border-left-width: 2px;
   }
   .visual-editor-cm .cm-selectionBackground,
   .visual-editor-cm ::selection {
     background-color: #bae6fd !important;
+  }
+  :root.dark .visual-editor-cm .cm-selectionBackground,
+  :root.dark .visual-editor-cm ::selection {
+    background-color: rgba(56, 189, 248, 0.25) !important;
   }
 
   /* Seamless Visual Formatting (Natural document flow without broken baseline or pill clutter) */
@@ -473,9 +593,15 @@
     font-weight: 700 !important;
     color: #0f172a !important;
   }
+  :root.dark .cm-visual-bold {
+    color: #f8fafc !important;
+  }
   .cm-visual-italic {
     font-style: italic !important;
     color: #1e293b !important;
+  }
+  :root.dark .cm-visual-italic {
+    color: #e2e8f0 !important;
   }
   .cm-visual-underline {
     text-decoration: underline !important;
@@ -491,6 +617,12 @@
     background: transparent !important;
     display: inline !important;
   }
+  :root.dark .cm-visual-tag,
+  :root.dark .cm-visual-tag-bold,
+  :root.dark .cm-visual-tag-italic,
+  :root.dark .cm-visual-tag-heading {
+    color: #60a5fa !important;
+  }
   .cm-visual-tag-bold {
     color: #1a56db !important;
   }
@@ -499,6 +631,9 @@
   }
   .cm-visual-tag-underline {
     color: #0284c7 !important;
+  }
+  :root.dark .cm-visual-tag-underline {
+    color: #38bdf8 !important;
   }
   .cm-visual-tag-heading {
     color: #1a56db !important;
@@ -509,15 +644,24 @@
     color: #0f172a !important;
     font-size: 15px !important;
   }
+  :root.dark .cm-visual-section {
+    color: #f8fafc !important;
+  }
   .cm-visual-subsection {
     font-weight: 600 !important;
     color: #1e293b !important;
     font-size: 14px !important;
   }
+  :root.dark .cm-visual-subsection {
+    color: #e2e8f0 !important;
+  }
   .cm-visual-subsubsection {
     font-weight: 600 !important;
     color: #334155 !important;
     font-size: 13.5px !important;
+  }
+  :root.dark .cm-visual-subsubsection {
+    color: #cbd5e1 !important;
   }
   .cm-visual-math {
     color: #0f172a !important;
@@ -527,6 +671,9 @@
     border: none !important;
     background: transparent !important;
   }
+  :root.dark .cm-visual-math {
+    color: #f1f5f9 !important;
+  }
   .cm-visual-comment {
     color: #2e7d32 !important;
     font-style: normal !important;
@@ -534,9 +681,15 @@
     font-size: inherit !important;
     opacity: 0.9 !important;
   }
+  :root.dark .cm-visual-comment {
+    color: #4ade80 !important;
+  }
   .cm-visual-item {
     color: #1a56db !important;
     font-weight: 600 !important;
+  }
+  :root.dark .cm-visual-item {
+    color: #60a5fa !important;
   }
   .cm-visual-env {
     color: #1a56db !important;
@@ -545,5 +698,8 @@
     margin: 0 !important;
     border: none !important;
     background: transparent !important;
+  }
+  :root.dark .cm-visual-env {
+    color: #60a5fa !important;
   }
 }

@@ -17,6 +17,7 @@ import {
 import { useProjectStore, ProjectMeta } from '../store/projectStore';
 import { useEditorStore } from '../store/editorStore';
 import { AiSettingsModal } from '../components/Settings/AiSettingsModal';
+import { ThemeToggle } from '../components/Common/ThemeToggle';
 import {
   listProjects,
   createProject,
@@ -550,7 +551,7 @@ const Dashboard: React.FC = () => {
   return (
     <div className="flex flex-col h-screen bg-bg-app">
       {/* Header */}
-      <header className="flex items-center justify-between px-5 h-[52px] bg-brand-green text-text-inverse shadow-sm z-10 shrink-0">
+      <header className="flex items-center justify-between px-5 h-[52px] bg-brand-header text-text-inverse shadow-sm z-10 shrink-0">
         <div className="flex items-center gap-3">
           <div className="flex items-center justify-center w-8 h-8 bg-white/[0.18] rounded-md text-white">
             <Leaf size={18} />
@@ -558,7 +559,8 @@ const Dashboard: React.FC = () => {
           <span className="text-[17px] font-bold -tracking-[0.02em] text-white">Underleaf</span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
+          <ThemeToggle />
           <button
             onClick={() => setIsSettingsOpen(true)}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[12px] font-medium bg-white/15 text-white hover:bg-white/25 transition-all cursor-pointer"
@@ -583,7 +585,7 @@ const Dashboard: React.FC = () => {
           </button>
 
           <nav className="flex flex-col gap-0.5 flex-1">
-            <button className="flex items-center justify-between py-2 px-3 rounded-md text-brand-green text-[12.5px] font-semibold cursor-pointer border-none bg-brand-green-light w-full text-left transition-all duration-[120ms]">
+            <button className="flex items-center justify-between py-2 px-3 rounded-md text-text-brand text-[12.5px] font-semibold cursor-pointer border-none bg-brand-green-light w-full text-left transition-all duration-[120ms]">
               <span className="flex items-center gap-2.5">
                 <FileText size={16} />
                 All Projects
@@ -618,7 +620,7 @@ const Dashboard: React.FC = () => {
                 <Search size={14} className="absolute left-2.5 text-text-muted pointer-events-none" />
                 <input
                   type="text"
-                  className="w-full py-[7px] pr-3 pl-[34px] bg-bg-surface border border-border-medium rounded-md text-[12.5px] text-text-primary transition-all duration-[120ms] focus:outline-none focus:border-brand-green focus:shadow-[0_0_0_3px_rgba(2,96,70,0.12)]"
+                  className="w-full py-[7px] pr-3 pl-[34px] bg-bg-surface border border-border-medium rounded-md text-[12.5px] text-text-primary placeholder:text-text-muted transition-all duration-[120ms] focus:outline-none focus:border-brand-green focus:shadow-[0_0_0_3px_rgba(2,96,70,0.12)]"
                   placeholder="Search projects…"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -635,7 +637,7 @@ const Dashboard: React.FC = () => {
               </div>
             ) : filteredProjects.length === 0 ? (
               <div className="py-10 px-5 text-center bg-bg-surface rounded-lg border border-dashed border-border-medium">
-                <div className="w-16 h-16 mx-auto mb-3 flex items-center justify-center bg-brand-green-light text-brand-green rounded-full">
+                <div className="w-16 h-16 mx-auto mb-3 flex items-center justify-center bg-brand-green-light text-text-brand rounded-full">
                   <FileText size={28} />
                 </div>
                 <h2 className="text-[17px] font-semibold text-text-primary mb-1.5">
@@ -671,15 +673,15 @@ const Dashboard: React.FC = () => {
                     {filteredProjects.map((project) => (
                       <tr
                         key={project.id}
-                        className="cursor-pointer transition-colors duration-[120ms] hover:bg-[#f8fafc] border-b border-border-subtle last:border-b-0"
+                        className="cursor-pointer transition-colors duration-[120ms] hover:bg-bg-subtle border-b border-border-subtle last:border-b-0"
                         onClick={() => openProject(project)}
                       >
                         <td className="py-3 px-4 align-middle">
                           <div className="flex items-center gap-3">
-                            <div className="flex items-center justify-center w-8 h-8 bg-[#ecfdf5] text-brand-green rounded shrink-0">
+                            <div className="flex items-center justify-center w-8 h-8 bg-brand-green-light text-text-brand rounded shrink-0">
                               <FileText size={16} />
                             </div>
-                            <span className="font-semibold text-text-primary text-[13.5px] hover:text-brand-green">{project.name}</span>
+                            <span className="font-semibold text-text-primary text-[13.5px] hover:text-text-brand">{project.name}</span>
                           </div>
                         </td>
                         <td className="py-3 px-4 align-middle">
@@ -705,7 +707,7 @@ const Dashboard: React.FC = () => {
                               <Edit3 size={15} />
                             </button>
                             <button
-                              className="btn btn-ghost btn-icon text-text-muted hover:text-error hover:bg-error-bg active:scale-95 active:bg-red-100 transition-all"
+                              className="btn btn-ghost btn-icon text-text-muted hover:text-error hover:bg-error-bg active:scale-95 transition-all"
                               onClick={() => setDeleteModal(project)}
                               title="Delete project"
                               aria-label="Delete project"
@@ -726,7 +728,7 @@ const Dashboard: React.FC = () => {
 
       {/* New Project Modal */}
       {showNewProject && (
-        <div className="fixed inset-0 bg-slate-900/45 backdrop-blur-[4px] flex items-center justify-center z-[100] animate-modal-fade-in" onClick={() => setShowNewProject(false)}>
+        <div className="fixed inset-0 bg-slate-900/45 dark:bg-black/65 backdrop-blur-[4px] flex items-center justify-center z-[100] animate-modal-fade-in" onClick={() => setShowNewProject(false)}>
           <div
             className="bg-bg-surface rounded-xl shadow-modal border border-border-subtle w-[90%] max-w-[580px] max-h-[85vh] flex flex-col overflow-hidden animate-modal-scale-up"
             onClick={(e) => e.stopPropagation()}
@@ -775,7 +777,7 @@ const Dashboard: React.FC = () => {
                           className={`w-8 h-8 rounded-md flex items-center justify-center mb-2.5 transition-colors ${
                             isSelected
                               ? 'bg-brand-green text-white shadow-xs'
-                              : 'bg-bg-subtle text-text-secondary group-hover:bg-brand-green-light group-hover:text-brand-green'
+                              : 'bg-bg-subtle text-text-secondary group-hover:bg-brand-green-light group-hover:text-text-brand'
                           }`}
                         >
                           <IconComponent size={17} strokeWidth={2} />
@@ -810,7 +812,7 @@ const Dashboard: React.FC = () => {
 
       {/* Rename Modal */}
       {renameModal && (
-        <div className="fixed inset-0 bg-slate-900/45 backdrop-blur-[4px] flex items-center justify-center z-[100] animate-modal-fade-in" onClick={() => setRenameModal(null)}>
+        <div className="fixed inset-0 bg-slate-900/45 dark:bg-black/65 backdrop-blur-[4px] flex items-center justify-center z-[100] animate-modal-fade-in" onClick={() => setRenameModal(null)}>
           <div className="bg-bg-surface rounded-xl shadow-modal border border-border-subtle w-[90%] max-w-[580px] max-h-[85vh] flex flex-col overflow-hidden animate-modal-scale-up" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between px-5 py-4 border-b border-border-subtle">
               <h2 className="text-[17px] font-semibold text-text-primary">Rename Project</h2>
@@ -852,7 +854,7 @@ const Dashboard: React.FC = () => {
       {/* Delete Confirmation Modal */}
       {deleteModal && (
         <div
-          className="fixed inset-0 bg-slate-900/45 backdrop-blur-[4px] flex items-center justify-center z-[100] animate-modal-fade-in"
+          className="fixed inset-0 bg-slate-900/45 dark:bg-black/65 backdrop-blur-[4px] flex items-center justify-center z-[100] animate-modal-fade-in"
           onClick={() => !isDeleting && setDeleteModal(null)}
         >
           <div

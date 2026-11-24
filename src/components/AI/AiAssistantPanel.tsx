@@ -240,7 +240,7 @@ export const AiAssistantPanel: React.FC<AiAssistantPanelProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between px-3.5 py-2.5 bg-bg-sidebar border-b border-border-subtle shrink-0">
         <div className="flex items-center gap-2">
-          <div className="flex items-center justify-center w-6 h-6 rounded-md bg-brand-green/15 text-brand-green">
+          <div className="flex items-center justify-center w-6 h-6 rounded-md bg-brand-green-light text-text-brand">
             <Sparkles size={14} />
           </div>
           <div>
@@ -273,7 +273,7 @@ export const AiAssistantPanel: React.FC<AiAssistantPanelProps> = ({
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.length === 0 ? (
           <div className="h-full flex flex-col justify-center items-center text-center p-4">
-            <div className="w-12 h-12 rounded-full bg-brand-green/10 flex items-center justify-center text-brand-green mb-3">
+            <div className="w-12 h-12 rounded-full bg-brand-green-light flex items-center justify-center text-text-brand mb-3">
               <Sparkles size={24} />
             </div>
             <h3 className="font-semibold text-text-primary text-[14px] mb-1">
@@ -286,7 +286,7 @@ export const AiAssistantPanel: React.FC<AiAssistantPanelProps> = ({
 
             <div className="w-full space-y-1.5 text-left">
               <button
-                className="w-full p-2.5 rounded-lg border border-border-subtle hover:border-brand-green/40 hover:bg-brand-green-light/20 text-text-secondary text-[12px] flex items-center justify-between transition-colors cursor-pointer"
+                className="w-full p-2.5 rounded-lg border border-border-subtle hover:border-brand-green/50 hover:bg-brand-green-light/40 text-text-secondary text-[12px] flex items-center justify-between transition-colors cursor-pointer"
                 onClick={() =>
                   handleSendMessage('Review my current resume and suggest 3 high-impact improvements.')
                 }
@@ -299,7 +299,7 @@ export const AiAssistantPanel: React.FC<AiAssistantPanelProps> = ({
               </button>
 
               <button
-                className="w-full p-2.5 rounded-lg border border-border-subtle hover:border-brand-green/40 hover:bg-brand-green-light/20 text-text-secondary text-[12px] flex items-center justify-between transition-colors cursor-pointer"
+                className="w-full p-2.5 rounded-lg border border-border-subtle hover:border-brand-green/50 hover:bg-brand-green-light/40 text-text-secondary text-[12px] flex items-center justify-between transition-colors cursor-pointer"
                 onClick={() =>
                   handleSendMessage(
                     'Rewrite my recent work experience bullets using the STAR method with quantifiable metrics.'
@@ -307,7 +307,7 @@ export const AiAssistantPanel: React.FC<AiAssistantPanelProps> = ({
                 }
               >
                 <span className="flex items-center gap-2">
-                  <BarChart3 size={13} className="text-brand-green shrink-0" />
+                  <BarChart3 size={13} className="text-text-brand shrink-0" />
                   Quantify bullets with STAR method
                 </span>
                 <ChevronRight size={13} className="text-text-muted" />
@@ -315,7 +315,7 @@ export const AiAssistantPanel: React.FC<AiAssistantPanelProps> = ({
 
               {compileErrors.length > 0 && (
                 <button
-                  className="w-full p-2.5 rounded-lg border border-error-border bg-error-bg/30 hover:bg-error-bg/60 text-error text-[12px] flex items-center justify-between transition-colors cursor-pointer"
+                  className="w-full p-2.5 rounded-lg border border-error-border bg-error-bg/40 hover:bg-error-bg/70 text-error text-[12px] flex items-center justify-between transition-colors cursor-pointer"
                   onClick={() =>
                     handleSendMessage(
                       `Please diagnose and fix these LaTeX compiler errors:\n${compileErrors.join(
@@ -377,10 +377,10 @@ export const AiAssistantPanel: React.FC<AiAssistantPanelProps> = ({
                     return (
                       <div
                         key={idx}
-                        className="p-3 rounded-lg border border-brand-green/30 bg-brand-green-light/30 text-[12px]"
+                        className="p-3 rounded-lg border border-brand-green-border bg-brand-green-light/50 text-[12px]"
                       >
                         <div className="flex items-center justify-between mb-1.5">
-                          <span className="font-semibold text-brand-green flex items-center gap-1">
+                          <span className="font-semibold text-text-brand flex items-center gap-1">
                             <Code2 size={13} />
                             {action.explanation || 'Proposed LaTeX Edit'}
                           </span>
@@ -390,16 +390,16 @@ export const AiAssistantPanel: React.FC<AiAssistantPanelProps> = ({
                         </div>
 
                         {action.type === 'patch_snippet' ? (
-                          <div className="font-mono text-[11px] bg-white p-2 rounded border border-border-subtle my-2 max-h-32 overflow-y-auto">
-                            <div className="text-red-600 line-through">
+                          <div className="font-mono text-[11px] bg-bg-app p-2 rounded border border-border-subtle my-2 max-h-32 overflow-y-auto">
+                            <div className="text-error line-through">
                               {action.search}
                             </div>
-                            <div className="text-green-700 font-semibold">
+                            <div className="text-success font-semibold">
                               {action.replace}
                             </div>
                           </div>
                         ) : (
-                          <pre className="font-mono text-[11px] bg-white p-2 rounded border border-border-subtle my-2 max-h-32 overflow-y-auto text-text-primary whitespace-pre-wrap">
+                          <pre className="font-mono text-[11px] bg-bg-app p-2 rounded border border-border-subtle my-2 max-h-32 overflow-y-auto text-text-primary whitespace-pre-wrap">
                             {action.code.length > 300
                               ? action.code.slice(0, 300) + '…'
                               : action.code}
@@ -408,7 +408,7 @@ export const AiAssistantPanel: React.FC<AiAssistantPanelProps> = ({
 
                         <div className="flex justify-end gap-2 mt-2">
                           {isApplied ? (
-                            <span className="inline-flex items-center gap-1 text-[11px] text-green-700 font-semibold py-1 px-2.5 bg-green-100 rounded">
+                            <span className="inline-flex items-center gap-1 text-[11px] text-success font-semibold py-1 px-2.5 bg-success-bg rounded">
                               <Check size={12} /> Applied
                             </span>
                           ) : (
@@ -451,7 +451,7 @@ export const AiAssistantPanel: React.FC<AiAssistantPanelProps> = ({
             }}
             placeholder="Ask voyager (e.g. improve bullets, fix syntax)..."
             rows={2}
-            className="flex-1 p-2 bg-white border border-border-subtle rounded-lg text-[12.5px] resize-none focus:outline-none focus:border-brand-green leading-snug"
+            className="flex-1 p-2 bg-bg-surface text-text-primary placeholder:text-text-muted border border-border-subtle rounded-lg text-[12.5px] resize-none focus:outline-none focus:border-brand-green leading-snug"
           />
 
           {isGenerating ? (

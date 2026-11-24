@@ -56,7 +56,7 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ onAction }) => {
         <button
           type="button"
           className={`inline-flex items-center py-1 px-2.5 border-none rounded text-[12px] font-medium cursor-pointer transition-all duration-150 ${editorMode === 'code'
-              ? 'bg-white text-text-primary font-semibold shadow-sm'
+              ? 'bg-bg-surface text-text-primary font-semibold shadow-sm'
               : 'bg-transparent text-text-muted hover:text-text-primary'
             }`}
           onClick={() => setEditorMode('code')}
@@ -67,7 +67,7 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ onAction }) => {
         <button
           type="button"
           className={`inline-flex items-center py-1 px-2.5 border-none rounded text-[12px] font-medium cursor-pointer transition-all duration-150 ${editorMode === 'visual'
-              ? 'bg-white text-text-primary font-semibold shadow-sm'
+              ? 'bg-bg-surface text-text-primary font-semibold shadow-sm'
               : 'bg-transparent text-text-muted hover:text-text-primary'
             }`}
           onClick={() => setEditorMode('visual')}
@@ -172,7 +172,7 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ onAction }) => {
         onClick={toggleAiPanel}
         className={`inline-flex items-center gap-1.5 py-1 px-2.5 rounded text-[11.5px] font-medium transition-colors cursor-pointer ${isAiPanelOpen
             ? 'bg-brand-green text-white font-semibold shadow-2xs'
-            : 'bg-brand-green/10 text-brand-green hover:bg-brand-green/20'
+            : 'bg-brand-green-light text-text-brand hover:bg-brand-green/25'
           }`}
         title="Toggle voyager"
       >

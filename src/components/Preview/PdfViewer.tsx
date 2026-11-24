@@ -142,7 +142,7 @@ const PdfViewer: React.FC = () => {
               <div className="w-14 h-14 rounded-2xl bg-bg-surface border border-border-medium/60 shadow-xs flex items-center justify-center text-text-muted mb-1">
                 <FileText size={28} strokeWidth={1.75} />
               </div>
-              <h3 className="text-[16px] font-semibold text-[#1e293b]">No PDF Preview</h3>
+              <h3 className="text-[16px] font-semibold text-text-primary">No PDF Preview</h3>
               <p className="text-[13px] text-text-muted max-w-[300px] leading-[1.5]">Click <strong>Recompile</strong> to generate the PDF preview</p>
             </div>
           )}
@@ -151,7 +151,7 @@ const PdfViewer: React.FC = () => {
           {compileStatus === 'compiling' && !pdfFile && (
             <div className="flex flex-col items-center justify-center h-full w-full text-text-muted gap-3 text-center p-8">
               <div className="compile-spinner" />
-              <h3 className="text-[16px] font-semibold text-[#1e293b]">
+              <h3 className="text-[16px] font-semibold text-text-primary">
                 {elapsedCompileSec >= 4 ? 'Setting up TeX engine…' : 'Compiling…'}
               </h3>
               <p className="text-[13px] text-text-muted max-w-[340px] leading-[1.5]">
@@ -160,7 +160,7 @@ const PdfViewer: React.FC = () => {
                   : 'Generating your document'}
               </p>
               {elapsedCompileSec >= 5 && (
-                <span className="text-[11.5px] font-mono text-brand-green bg-brand-green/10 px-2.5 py-1 rounded-full mt-2">
+                <span className="text-[11.5px] font-mono text-text-brand bg-brand-green-light px-2.5 py-1 rounded-full mt-2">
                   Elapsed: {elapsedCompileSec}s
                 </span>
               )}
@@ -169,7 +169,7 @@ const PdfViewer: React.FC = () => {
 
           {/* Recompilation floating indicator when PDF already exists */}
           {compileStatus === 'compiling' && pdfFile && (
-            <div className="sticky top-3 z-50 flex items-center gap-2 bg-white/95 backdrop-blur-lg text-text-primary py-2 px-4.5 rounded-full shadow-[0_4px_16px_rgba(0,0,0,0.12),0_1px_3px_rgba(0,0,0,0.08)] border border-brand-green/25 text-[13px] font-medium mb-4 animate-fade-in-down">
+            <div className="sticky top-3 z-50 flex items-center gap-2 bg-bg-surface/95 backdrop-blur-lg text-text-primary py-2 px-4.5 rounded-full shadow-[0_4px_16px_rgba(0,0,0,0.12),0_1px_3px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_18px_rgba(0,0,0,0.5)] border border-brand-green-border text-[13px] font-medium mb-4 animate-fade-in-down">
               <div className="compile-spinner-sm" />
               <span>
                 {elapsedCompileSec >= 4

@@ -4,8 +4,9 @@ import { EditorView, MatchDecorator, Decoration, ViewPlugin, keymap } from '@cod
 import { syntaxHighlighting } from '@codemirror/language';
 import { latex } from 'codemirror-lang-latex';
 import { useEditorStore } from '../../store/editorStore';
+import { useThemeStore } from '../../store/themeStore';
 import { applyEditorAction } from '../../utils/editorActions';
-import { overleafHighlightStyle } from './LatexEditor';
+import { overleafHighlightStyle, overleafDarkHighlightStyle } from './LatexEditor';
 
 // Visual Decorators for Overleaf-like rich rendering
 const boldDecorator = new MatchDecorator({
@@ -220,12 +221,51 @@ const visualTheme = EditorView.theme({
   },
 });
 
+const visualDarkTheme = EditorView.theme(
+  {
+    '&': {
+      backgroundColor: 'transparent',
+      color: '#e6edf3',
+      fontSize: '13.5px',
+      fontFamily: "'JetBrains Mono', 'Fira Code', Menlo, Monaco, Consolas, monospace",
+    },
+    '.cm-content': {
+      fontFamily: "'JetBrains Mono', 'Fira Code', Menlo, Monaco, Consolas, monospace",
+      fontSize: '13.5px',
+      lineHeight: '1.65',
+      padding: '4px 0',
+      minHeight: '450px',
+      caretColor: '#e6edf3',
+    },
+    '.cm-line': {
+      padding: '1px 0',
+    },
+    '.cm-activeLine': {
+      backgroundColor: '#151c27',
+      borderRadius: '3px',
+    },
+    '.cm-cursor': {
+      borderLeftColor: '#e6edf3',
+      borderLeftWidth: '2px',
+    },
+    '.cm-selectionBackground, ::selection': {
+      backgroundColor: 'rgba(56, 189, 248, 0.25) !important',
+    },
+    '&.cm-focused .cm-selectionBackground': {
+      backgroundColor: 'rgba(56, 189, 248, 0.3) !important',
+    },
+  },
+  { dark: true }
+);
+
 interface VisualEditorProps {
   onViewReady?: (view: EditorView | null) => void;
 }
 
 const VisualEditor: React.FC<VisualEditorProps> = ({ onViewReady }) => {
   const { content, setContent } = useEditorStore();
+  const resolvedTheme = useThemeStore((s) => s.resolvedTheme);
+  const isDark = resolvedTheme === 'dark';
   const cmRef = useRef<ReactCodeMirrorRef>(null);
 
   // Split document into preamble and body
@@ -285,8 +325,8 @@ const VisualEditor: React.FC<VisualEditorProps> = ({ onViewReady }) => {
   const extensions = useMemo(() => {
     return [
       latex(),
-      syntaxHighlighting(overleafHighlightStyle),
-      visualTheme,
+      syntaxHighlighting(isDark ? overleafDarkHighlightStyle : overleafHighlightStyle),
+      isDark ? visualDarkTheme : visualTheme,
       EditorView.lineWrapping,
       boldPlugin,
       italicPlugin,
@@ -313,10 +353,10 @@ const VisualEditor: React.FC<VisualEditorProps> = ({ onViewReady }) => {
         },
       ]),
     ];
-  }, []);
+  }, [isDark]);
 
   return (
-    <div className="flex-1 h-full overflow-y-auto flex flex-col items-center py-5 px-3 sm:px-6 font-sans select-text">
+    <div className="flex-1 h-full overflow-y-auto flex flex-col items-center py-5 px-3 sm:px-6 font-sans select-text bg-bg-surface dark:bg-[#0d1117]">
 
       {/* Main Document Body on Paper Canvas */}
       <div
@@ -327,7 +367,7 @@ const VisualEditor: React.FC<VisualEditorProps> = ({ onViewReady }) => {
           ref={cmRef}
           className="visual-editor-cm"
           value={bodyContent}
-          theme="light"
+          theme={isDark ? 'dark' : 'light'}
           extensions={extensions}
           onChange={handleBodyChange}
           onCreateEditor={onCreateEditor}
