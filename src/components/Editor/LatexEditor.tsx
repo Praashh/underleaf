@@ -5,9 +5,10 @@ import { HighlightStyle, syntaxHighlighting } from '@codemirror/language';
 import { tags as t } from '@lezer/highlight';
 import { latex } from 'codemirror-lang-latex';
 import { useEditorStore } from '../../store/editorStore';
+import { useThemeStore } from '../../store/themeStore';
 import { applyEditorAction } from '../../utils/editorActions';
 
-// Overleaf LaTeX Light Highlight Style (Screenshot 1)
+// Overleaf LaTeX Light Highlight Style
 export const overleafHighlightStyle = HighlightStyle.define([
   // % Comments in bright green
   { tag: t.comment, color: '#2e7d32', fontStyle: 'normal' },
@@ -29,7 +30,29 @@ export const overleafHighlightStyle = HighlightStyle.define([
   { tag: t.content, color: '#111827' },
 ]);
 
-// Editor theme configuration
+// Overleaf LaTeX Dark Highlight Style
+export const overleafDarkHighlightStyle = HighlightStyle.define([
+  // % Comments in vibrant emerald green
+  { tag: t.comment, color: '#4ade80', fontStyle: 'normal' },
+  { tag: t.lineComment, color: '#4ade80', fontStyle: 'normal' },
+  { tag: t.blockComment, color: '#4ade80', fontStyle: 'normal' },
+
+  // LaTeX commands in crisp sky blue
+  { tag: [t.keyword, t.definitionKeyword, t.operatorKeyword], color: '#60a5fa', fontWeight: '500' },
+  { tag: [t.variableName, t.tagName], color: '#60a5fa' },
+  { tag: [t.standard(t.variableName)], color: '#60a5fa' },
+
+  // Brackets / options in cyan
+  { tag: [t.bracket, t.squareBracket], color: '#38bdf8' },
+  { tag: [t.atom, t.literal], color: '#38bdf8' },
+
+  // Curly braces & prose in high-contrast light text
+  { tag: [t.brace, t.paren], color: '#e6edf3' },
+  { tag: [t.string, t.special(t.string)], color: '#e6edf3' },
+  { tag: t.content, color: '#e6edf3' },
+]);
+
+// Editor light theme configuration
 const overleafTheme = EditorView.theme({
   '&': {
     height: '100%',
@@ -69,12 +92,58 @@ const overleafTheme = EditorView.theme({
   },
 });
 
+// Editor dark theme configuration
+const overleafDarkTheme = EditorView.theme(
+  {
+    '&': {
+      height: '100%',
+      backgroundColor: '#0d1117',
+      color: '#e6edf3',
+    },
+    '.cm-scroller': {
+      overflow: 'auto !important',
+      height: '100% !important',
+      lineHeight: '1.65',
+      fontFamily: "'JetBrains Mono', 'Fira Code', 'Menlo', Monaco, monospace",
+    },
+    '.cm-content': {
+      fontFamily: "'JetBrains Mono', 'Fira Code', 'Menlo', Monaco, monospace",
+      fontSize: '13.5px',
+      lineHeight: '1.65',
+      padding: '8px 0',
+      caretColor: '#e6edf3',
+    },
+    '.cm-gutters': {
+      backgroundColor: '#11161d',
+      color: '#64748b',
+      borderRight: '1px solid #242d3a',
+      fontFamily: "'JetBrains Mono', monospace",
+      fontSize: '12.5px',
+    },
+    '.cm-activeLine': {
+      backgroundColor: '#151c27',
+    },
+    '.cm-activeLineGutter': {
+      backgroundColor: '#1c2533',
+      color: '#e6edf3',
+      fontWeight: '600',
+    },
+    '.cm-cursor': {
+      borderLeftColor: '#e6edf3',
+      borderLeftWidth: '2px',
+    },
+  },
+  { dark: true }
+);
+
 interface LatexEditorProps {
   onViewReady?: (view: EditorView | null) => void;
 }
 
 const LatexEditor: React.FC<LatexEditorProps> = ({ onViewReady }) => {
   const { content, setContent } = useEditorStore();
+  const resolvedTheme = useThemeStore((s) => s.resolvedTheme);
+  const isDark = resolvedTheme === 'dark';
   const cmRef = useRef<ReactCodeMirrorRef>(null);
 
   const onChange = useCallback(
@@ -103,8 +172,8 @@ const LatexEditor: React.FC<LatexEditorProps> = ({ onViewReady }) => {
   const extensions = useMemo(() => {
     return [
       latex(),
-      overleafTheme,
-      syntaxHighlighting(overleafHighlightStyle),
+      isDark ? overleafDarkTheme : overleafTheme,
+      syntaxHighlighting(isDark ? overleafDarkHighlightStyle : overleafHighlightStyle),
       EditorView.lineWrapping,
       keymap.of([
         {
@@ -123,7 +192,7 @@ const LatexEditor: React.FC<LatexEditorProps> = ({ onViewReady }) => {
         },
       ]),
     ];
-  }, []);
+  }, [isDark]);
 
   return (
     <div className="latex-editor">
@@ -132,7 +201,7 @@ const LatexEditor: React.FC<LatexEditorProps> = ({ onViewReady }) => {
         className="latex-codemirror-wrapper"
         value={content}
         height="100%"
-        theme="light"
+        theme={isDark ? 'dark' : 'light'}
         extensions={extensions}
         onChange={onChange}
         onCreateEditor={onCreateEditor}

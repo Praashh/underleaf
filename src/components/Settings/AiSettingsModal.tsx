@@ -52,7 +52,7 @@ export const AiSettingsModal: React.FC<AiSettingsModalProps> = ({ isOpen, onClos
 
   return (
     <div
-      className="fixed inset-0 bg-slate-900/50 backdrop-blur-[4px] flex items-center justify-center z-[200] animate-modal-fade-in select-none"
+      className="fixed inset-0 bg-slate-900/50 dark:bg-black/65 backdrop-blur-[4px] flex items-center justify-center z-[200] animate-modal-fade-in select-none"
       onClick={onClose}
     >
       <div
@@ -62,7 +62,7 @@ export const AiSettingsModal: React.FC<AiSettingsModalProps> = ({ isOpen, onClos
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-border-subtle bg-bg-sidebar">
           <div className="flex items-center gap-2.5">
-            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-brand-green/10 text-brand-green">
+            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-brand-green-light text-text-brand">
               <Sparkles size={18} />
             </div>
             <div>
@@ -83,9 +83,9 @@ export const AiSettingsModal: React.FC<AiSettingsModalProps> = ({ isOpen, onClos
         {/* Tab switcher */}
         <div className="flex px-6 border-b border-border-subtle bg-bg-surface gap-4 text-[13px]">
           <button
-            className={`py-2.5 border-b-2 font-medium transition-colors ${
+            className={`py-2.5 border-b-2 font-medium transition-colors cursor-pointer ${
               activeTab === 'providers'
-                ? 'border-brand-green text-brand-green'
+                ? 'border-brand-green text-text-brand'
                 : 'border-transparent text-text-muted hover:text-text-primary'
             }`}
             onClick={() => setActiveTab('providers')}
@@ -93,9 +93,9 @@ export const AiSettingsModal: React.FC<AiSettingsModalProps> = ({ isOpen, onClos
             Provider & Model
           </button>
           <button
-            className={`py-2.5 border-b-2 font-medium transition-colors ${
+            className={`py-2.5 border-b-2 font-medium transition-colors cursor-pointer ${
               activeTab === 'instructions'
-                ? 'border-brand-green text-brand-green'
+                ? 'border-brand-green text-text-brand'
                 : 'border-transparent text-text-muted hover:text-text-primary'
             }`}
             onClick={() => setActiveTab('instructions')}
@@ -115,7 +115,7 @@ export const AiSettingsModal: React.FC<AiSettingsModalProps> = ({ isOpen, onClos
                     Active AI Provider
                   </label>
                   <button
-                    className="inline-flex items-center gap-1 text-[11px] text-brand-green hover:underline cursor-pointer disabled:opacity-50"
+                    className="inline-flex items-center gap-1 text-[11px] text-text-brand hover:underline cursor-pointer disabled:opacity-50"
                     onClick={checkAvailability}
                     disabled={isCheckingAvailability}
                   >
@@ -140,7 +140,7 @@ export const AiSettingsModal: React.FC<AiSettingsModalProps> = ({ isOpen, onClos
                         }}
                         className={`flex flex-col text-left p-3 rounded-lg border transition-all cursor-pointer relative ${
                           isSelected
-                            ? 'border-brand-green bg-brand-green-light/40 shadow-xs ring-1 ring-brand-green/30'
+                            ? 'border-brand-green bg-brand-green-light/60 shadow-xs ring-1 ring-brand-green/30'
                             : 'border-border-subtle hover:border-text-muted/40 bg-bg-surface'
                         }`}
                       >
@@ -150,15 +150,15 @@ export const AiSettingsModal: React.FC<AiSettingsModalProps> = ({ isOpen, onClos
                             {p.name}
                           </span>
                           {p.id === 'openai' ? (
-                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 font-mono">
+                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-info-bg text-info font-mono">
                               HTTP
                             </span>
                           ) : (
                             <span
                               className={`inline-flex items-center gap-1 text-[10.5px] px-1.5 py-0.5 rounded font-medium ${
                                 isAvailable
-                                  ? 'bg-green-100 text-green-700'
-                                  : 'bg-slate-100 text-slate-500'
+                                  ? 'bg-success-bg text-success'
+                                  : 'bg-bg-subtle text-text-muted'
                               }`}
                             >
                               {isAvailable ? (
@@ -197,7 +197,7 @@ export const AiSettingsModal: React.FC<AiSettingsModalProps> = ({ isOpen, onClos
                         ? `Default: ${currentSuggestions[0]}`
                         : 'Leave blank to use CLI default'
                     }
-                    className="flex-1 px-3 py-1.5 bg-bg-app border border-border-subtle rounded-md text-[13px] focus:outline-none focus:border-brand-green font-mono"
+                    className="flex-1 px-3 py-1.5 bg-bg-app text-text-primary placeholder:text-text-muted border border-border-subtle rounded-md text-[13px] focus:outline-none focus:border-brand-green font-mono"
                   />
                   {currentSuggestions.length > 0 && (
                     <select
@@ -225,7 +225,7 @@ export const AiSettingsModal: React.FC<AiSettingsModalProps> = ({ isOpen, onClos
               {provider === 'openai' && (
                 <div className="p-4 rounded-lg bg-bg-sidebar border border-border-subtle space-y-3.5">
                   <div className="flex items-center gap-1.5 font-medium text-text-primary text-[12.5px]">
-                    <Globe size={14} className="text-brand-green" />
+                    <Globe size={14} className="text-text-brand" />
                     <span>OpenAI-Compatible HTTP Endpoint</span>
                   </div>
 
@@ -238,7 +238,7 @@ export const AiSettingsModal: React.FC<AiSettingsModalProps> = ({ isOpen, onClos
                       value={baseUrl}
                       onChange={(e) => setBaseUrl(e.target.value)}
                       placeholder="http://localhost:11434/v1"
-                      className="w-full px-3 py-1.5 bg-white border border-border-subtle rounded text-[12.5px] font-mono focus:outline-none focus:border-brand-green"
+                      className="w-full px-3 py-1.5 bg-bg-surface text-text-primary placeholder:text-text-muted border border-border-subtle rounded text-[12.5px] font-mono focus:outline-none focus:border-brand-green"
                     />
                     <p className="text-[10.5px] text-text-muted mt-1">
                       Works with Ollama (<code>http://localhost:11434/v1</code>), LM Studio (
@@ -255,7 +255,7 @@ export const AiSettingsModal: React.FC<AiSettingsModalProps> = ({ isOpen, onClos
                       value={apiKey}
                       onChange={(e) => setApiKey(e.target.value)}
                       placeholder="sk-..."
-                      className="w-full px-3 py-1.5 bg-white border border-border-subtle rounded text-[12.5px] font-mono focus:outline-none focus:border-brand-green"
+                      className="w-full px-3 py-1.5 bg-bg-surface text-text-primary placeholder:text-text-muted border border-border-subtle rounded text-[12.5px] font-mono focus:outline-none focus:border-brand-green"
                     />
                   </div>
                 </div>
@@ -274,7 +274,7 @@ export const AiSettingsModal: React.FC<AiSettingsModalProps> = ({ isOpen, onClos
                     value={timeoutSecs || ''}
                     onChange={(e) => setTimeoutSecs(Number(e.target.value) || 0)}
                     placeholder="0 (smart default: 180s)"
-                    className="w-32 px-3 py-1.5 bg-bg-app border border-border-subtle rounded-md text-[13px] font-mono focus:outline-none focus:border-brand-green"
+                    className="w-32 px-3 py-1.5 bg-bg-app text-text-primary placeholder:text-text-muted border border-border-subtle rounded-md text-[13px] font-mono focus:outline-none focus:border-brand-green"
                   />
                   <span className="text-[11.5px] text-text-muted">
                     0 = use smart automatic timeout (3 to 10 minutes)
@@ -296,7 +296,7 @@ export const AiSettingsModal: React.FC<AiSettingsModalProps> = ({ isOpen, onClos
                 value={customInstructions}
                 onChange={(e) => setCustomInstructions(e.target.value)}
                 placeholder="e.g. Always format work experience with the STAR method. Keep resume to exactly 1 page."
-                className="w-full px-3 py-2 bg-bg-app border border-border-subtle rounded-md text-[12.5px] focus:outline-none focus:border-brand-green font-mono leading-relaxed"
+                className="w-full px-3 py-2 bg-bg-app text-text-primary placeholder:text-text-muted border border-border-subtle rounded-md text-[12.5px] focus:outline-none focus:border-brand-green font-mono leading-relaxed"
               />
             </div>
           )}
@@ -305,7 +305,7 @@ export const AiSettingsModal: React.FC<AiSettingsModalProps> = ({ isOpen, onClos
         {/* Footer */}
         <div className="flex items-center justify-between px-6 py-3.5 border-t border-border-subtle bg-bg-sidebar">
           <span className="text-[11.5px] text-text-muted flex items-center gap-1">
-            <Shield size={12} className="text-brand-green" />
+            <Shield size={12} className="text-text-brand" />
             Runs securely using your local machine credentials
           </span>
           <button className="btn btn-primary" onClick={onClose}>

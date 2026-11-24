@@ -81,7 +81,7 @@ const PdfToolbar: React.FC<PdfToolbarProps> = ({
 
       <div className="flex items-center gap-1">
         <button
-          className="toolbar-btn !text-brand-green !bg-brand-green-light !border-brand-green-border hover:!bg-[#ccebe2] hover:!text-brand-green-dark"
+          className="toolbar-btn !text-text-brand !bg-brand-green-light !border-brand-green-border hover:!bg-brand-green/25 hover:!text-brand-green-dark"
           onClick={handleDownload}
           title="Download PDF"
         >

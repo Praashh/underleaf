@@ -22,6 +22,7 @@ import EditorToolbar from '../components/Editor/EditorToolbar';
 import PdfViewer from '../components/Preview/PdfViewer';
 import { AiAssistantPanel } from '../components/AI/AiAssistantPanel';
 import { AiSettingsModal } from '../components/Settings/AiSettingsModal';
+import { ThemeToggle } from '../components/Common/ThemeToggle';
 import { useEditorStore } from '../store/editorStore';
 import { useProjectStore } from '../store/projectStore';
 import { useAISettingsStore } from '../store/aiSettingsStore';
@@ -237,7 +238,7 @@ const EditorPage: React.FC = () => {
   return (
     <div className="flex flex-col h-screen bg-bg-app">
       {/* Header */}
-      <header className="flex items-center justify-between px-4 bg-brand-green text-white min-h-[48px] gap-4 shadow-sm z-10 shrink-0">
+      <header className="flex items-center justify-between px-4 bg-brand-header text-white min-h-[48px] gap-4 shadow-sm z-10 shrink-0">
         <div className="flex items-center gap-3 min-w-0">
           <button
             className="flex items-center justify-center w-[30px] h-[30px] border-none bg-white/15 text-white rounded-md cursor-pointer transition-[background] duration-150 hover:bg-white/25"
@@ -260,15 +261,17 @@ const EditorPage: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
+          <ThemeToggle />
+
           <button
             className={`flex items-center gap-1.5 py-1.5 px-3 rounded-md text-[12px] font-medium transition-all cursor-pointer ${isAiPanelOpen
-              ? 'bg-white text-brand-green font-semibold shadow-xs'
+              ? 'bg-white text-[#026046] font-semibold shadow-xs'
               : 'bg-white/15 text-white hover:bg-white/25'
               }`}
             onClick={toggleAiPanel}
             title="Toggle Voyager"
           >
-            <Sparkles size={14} className={isAiPanelOpen ? 'text-brand-green' : 'text-yellow-300'} />
+            <Sparkles size={14} className={isAiPanelOpen ? 'text-[#026046]' : 'text-yellow-300'} />
             <span>Voyager AI</span>
           </button>
 
@@ -304,7 +307,7 @@ const EditorPage: React.FC = () => {
           >
             <div className="flex flex-col h-full min-h-0 border-r border-border-subtle">
               <EditorToolbar onAction={handleFormatAction} />
-              <div className="flex-1 min-h-0 h-full overflow-hidden bg-white flex flex-col relative">
+              <div className="flex-1 min-h-0 h-full overflow-hidden bg-bg-surface dark:bg-[#0d1117] flex flex-col relative">
                 {editorMode === 'code' ? (
                   <LatexEditor
                     onViewReady={(v) => {
@@ -321,9 +324,9 @@ const EditorPage: React.FC = () => {
               </div>
               {/* Error panel */}
               {showErrors && compileErrors.length > 0 && (
-                <div className="border-t border-[#fecaca] bg-[#fff5f5] max-h-[180px] overflow-hidden flex flex-col">
+                <div className="border-t border-error-border bg-error-bg/40 max-h-[180px] overflow-hidden flex flex-col">
                   <div className="flex items-center justify-between py-2 px-3.5 bg-error-bg border-b border-error-border">
-                    <div className="flex items-center gap-1.5 text-[#991b1b] text-[11px] font-semibold">
+                    <div className="flex items-center gap-1.5 text-error text-[11px] font-semibold">
                       <AlertTriangle size={14} />
                       <span>
                         {compileErrors.length} error
@@ -332,10 +335,10 @@ const EditorPage: React.FC = () => {
                     </div>
                     <div className="flex items-center gap-2">
                       <button
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-[11px] font-semibold bg-white text-error border border-error-border shadow-2xs hover:bg-red-50 transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-[11px] font-semibold bg-bg-surface text-error border border-error-border shadow-2xs hover:bg-error-bg transition-colors cursor-pointer"
                         onClick={() => setIsAiPanelOpen(true)}
                       >
-                        <Sparkles size={12} className="text-brand-green" />
+                        <Sparkles size={12} className="text-text-brand" />
                         Fix with AI
                       </button>
                       <button
@@ -348,7 +351,7 @@ const EditorPage: React.FC = () => {
                   </div>
                   <div className="overflow-y-auto py-2 px-3.5">
                     {compileErrors.map((err, i) => (
-                      <div key={i} className="flex items-start gap-2 py-1 text-[12px] text-[#b91c1c] font-mono leading-[1.5]">
+                      <div key={i} className="flex items-start gap-2 py-1 text-[12px] text-error font-mono leading-[1.5]">
                         <XCircle size={12} className="shrink-0 mt-0.5" />
                         <span>{err}</span>
                       </div>
@@ -397,7 +400,7 @@ const EditorPage: React.FC = () => {
           <span className="flex items-center gap-[5px]">
             {compileStatus === 'success' && (
               <>
-                <CheckCircle2 size={11} className="text-[#16a34a]" />
+                <CheckCircle2 size={11} className="text-success" />
                 Compiled successfully
               </>
             )}
@@ -409,7 +412,7 @@ const EditorPage: React.FC = () => {
             )}
             {compileStatus === 'compiling' && (
               <>
-                <Loader2 size={11} className="animate-spin text-brand-green" />
+                <Loader2 size={11} className="animate-spin text-text-brand" />
                 <span>
                   {compileElapsed >= 4
                     ? `Compiling & downloading TeX packages (${compileElapsed}s)…`

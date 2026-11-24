@@ -34,8 +34,8 @@ const CodeBlock: React.FC<{ language?: string; code: string }> = ({ language, co
         >
           {copied ? (
             <>
-              <Check size={12} className="text-green-600" />
-              <span className="text-green-600">Copied</span>
+              <Check size={12} className="text-success" />
+              <span className="text-success">Copied</span>
             </>
           ) : (
             <>
@@ -122,7 +122,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ children, cl
                 e.preventDefault();
                 if (href) openUrl(href);
               }}
-              className="text-brand-green underline decoration-brand-green/30 hover:decoration-brand-green font-medium cursor-pointer"
+              className="text-text-brand underline decoration-brand-green/40 hover:decoration-brand-green font-medium cursor-pointer"
             >
               {children}
             </a>
