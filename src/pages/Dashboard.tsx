@@ -8,6 +8,7 @@ import {
   Search,
   Leaf,
   Loader2,
+  Settings,
   Sparkles,
   Briefcase,
   GraduationCap,
@@ -16,8 +17,7 @@ import {
 } from 'lucide-react';
 import { useProjectStore, ProjectMeta } from '../store/projectStore';
 import { useEditorStore } from '../store/editorStore';
-import { AiSettingsModal } from '../components/Settings/AiSettingsModal';
-import { ThemeToggle } from '../components/Common/ThemeToggle';
+import { SettingsView } from '../components/Settings/SettingsView';
 import {
   listProjects,
   createProject,
@@ -453,7 +453,7 @@ const Dashboard: React.FC = () => {
   const [renameName, setRenameName] = useState('');
   const [deleteModal, setDeleteModal] = useState<ProjectMeta | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<'all' | 'recent' | 'settings'>('all');
 
   useEffect(() => {
     loadProjects();
@@ -533,6 +533,13 @@ const Dashboard: React.FC = () => {
     p.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const displayedProjects =
+    activeTab === 'recent'
+      ? [...filteredProjects].sort(
+        (a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+      )
+      : filteredProjects;
+
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
     const now = new Date();
@@ -558,18 +565,6 @@ const Dashboard: React.FC = () => {
           </div>
           <span className="text-[17px] font-bold -tracking-[0.02em] text-white">Underleaf</span>
         </div>
-
-        <div className="flex items-center gap-2.5">
-          <ThemeToggle />
-          <button
-            onClick={() => setIsSettingsOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[12px] font-medium bg-white/15 text-white hover:bg-white/25 transition-all cursor-pointer"
-            title="Configure AI Providers"
-          >
-            <Sparkles size={14} className="text-yellow-300" />
-            <span>AI Settings</span>
-          </button>
-        </div>
       </header>
 
       {/* Body with Sidebar and Main View */}
@@ -585,22 +580,55 @@ const Dashboard: React.FC = () => {
           </button>
 
           <nav className="flex flex-col gap-0.5 flex-1">
-            <button className="flex items-center justify-between py-2 px-3 rounded-md text-text-brand text-[12.5px] font-semibold cursor-pointer border-none bg-brand-green-light w-full text-left transition-all duration-[120ms]">
+            <button
+              onClick={() => setActiveTab('all')}
+              className={`flex items-center justify-between py-2 px-3 rounded-md text-[12.5px] cursor-pointer border-none w-full text-left transition-all duration-[120ms] ${activeTab === 'all'
+                  ? 'bg-brand-green-light text-text-brand font-semibold'
+                  : 'bg-transparent text-text-secondary font-medium hover:bg-bg-subtle hover:text-text-primary'
+                }`}
+            >
               <span className="flex items-center gap-2.5">
                 <FileText size={16} />
                 All Projects
               </span>
-              <span className="text-[11px] px-[7px] py-0.5 bg-brand-green rounded-full text-white">
+              <span
+                className={`text-[11px] px-[7px] py-0.5 rounded-full ${activeTab === 'all'
+                    ? 'bg-brand-green text-white'
+                    : 'bg-bg-subtle text-text-muted'
+                  }`}
+              >
                 {projects.length}
               </span>
             </button>
-            <button className="flex items-center justify-between py-2 px-3 rounded-md text-text-secondary text-[12.5px] font-medium cursor-pointer border-none bg-transparent w-full text-left transition-all duration-[120ms] hover:bg-bg-subtle hover:text-text-primary">
+            <button
+              onClick={() => setActiveTab('recent')}
+              className={`flex items-center justify-between py-2 px-3 rounded-md text-[12.5px] cursor-pointer border-none w-full text-left transition-all duration-[120ms] ${activeTab === 'recent'
+                  ? 'bg-brand-green-light text-text-brand font-semibold'
+                  : 'bg-transparent text-text-secondary font-medium hover:bg-bg-subtle hover:text-text-primary'
+                }`}
+            >
               <span className="flex items-center gap-2.5">
                 <Clock size={16} />
                 Recent Projects
               </span>
             </button>
           </nav>
+
+          {/* Settings in Sidebar */}
+          <div className="pt-2 border-t border-border-subtle flex flex-col gap-0.5 mb-2">
+            <button
+              onClick={() => setActiveTab('settings')}
+              className={`flex items-center justify-between py-2 px-3 rounded-md text-[12.5px] cursor-pointer border-none w-full text-left transition-all duration-[120ms] ${activeTab === 'settings'
+                  ? 'bg-brand-green-light text-text-brand font-semibold'
+                  : 'bg-transparent text-text-secondary font-medium hover:bg-bg-subtle hover:text-text-primary'
+                }`}
+            >
+              <span className="flex items-center gap-2.5">
+                <Settings size={16} />
+                Settings
+              </span>
+            </button>
+          </div>
 
           <div className="pt-3 border-t border-border-subtle text-[11px] text-text-muted">
             <span>Storage: ~/underleaf/projects</span>
@@ -609,120 +637,126 @@ const Dashboard: React.FC = () => {
 
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto px-7 py-5 bg-bg-app">
-          <div className="max-w-[1120px] mx-auto">
-            {/* Toolbar */}
-            <div className="flex items-center justify-between mb-4 gap-3">
-              <div>
-                <h1 className="text-[20px] font-bold text-text-primary -tracking-[0.01em]">All Projects</h1>
-              </div>
+          {activeTab === 'settings' ? (
+            <SettingsView />
+          ) : (
+            <div className="max-w-[1120px] mx-auto">
+              {/* Toolbar */}
+              <div className="flex items-center justify-between mb-4 gap-3">
+                <div>
+                  <h1 className="text-[20px] font-bold text-text-primary -tracking-[0.01em]">
+                    {activeTab === 'recent' ? 'Recent Projects' : 'All Projects'}
+                  </h1>
+                </div>
 
-              <div className="flex items-center relative w-[300px]">
-                <Search size={14} className="absolute left-2.5 text-text-muted pointer-events-none" />
-                <input
-                  type="text"
-                  className="w-full py-[7px] pr-3 pl-[34px] bg-bg-surface border border-border-medium rounded-md text-[12.5px] text-text-primary placeholder:text-text-muted transition-all duration-[120ms] focus:outline-none focus:border-brand-green focus:shadow-[0_0_0_3px_rgba(2,96,70,0.12)]"
-                  placeholder="Search projects…"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-            </div>
-
-            {/* Projects Table / Empty State */}
-            {isLoading ? (
-              <div className="bg-bg-surface rounded-lg border border-border-subtle shadow-sm overflow-hidden">
-                <div className="p-8 text-center text-text-muted">
-                  Loading projects…
+                <div className="flex items-center relative w-[300px]">
+                  <Search size={14} className="absolute left-2.5 text-text-muted pointer-events-none" />
+                  <input
+                    type="text"
+                    className="w-full py-[7px] pr-3 pl-[34px] bg-bg-surface border border-border-medium rounded-md text-[12.5px] text-text-primary placeholder:text-text-muted transition-all duration-[120ms] focus:outline-none focus:border-brand-green focus:shadow-[0_0_0_3px_rgba(2,96,70,0.12)]"
+                    placeholder="Search projects…"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
                 </div>
               </div>
-            ) : filteredProjects.length === 0 ? (
-              <div className="py-10 px-5 text-center bg-bg-surface rounded-lg border border-dashed border-border-medium">
-                <div className="w-16 h-16 mx-auto mb-3 flex items-center justify-center bg-brand-green-light text-text-brand rounded-full">
-                  <FileText size={28} />
+
+              {/* Projects Table / Empty State */}
+              {isLoading ? (
+                <div className="bg-bg-surface rounded-lg border border-border-subtle shadow-sm overflow-hidden">
+                  <div className="p-8 text-center text-text-muted">
+                    Loading projects…
+                  </div>
                 </div>
-                <h2 className="text-[17px] font-semibold text-text-primary mb-1.5">
-                  {searchQuery ? 'No matching projects' : 'No projects yet'}
-                </h2>
-                <p className="text-text-muted text-[12.5px] max-w-[380px] mx-auto mb-5">
-                  {searchQuery
-                    ? 'Try searching with a different keyword.'
-                    : 'Create your first document or start with a resume template.'}
-                </p>
-                {!searchQuery && (
-                  <button
-                    className="btn btn-primary btn-lg"
-                    onClick={() => setShowNewProject(true)}
-                  >
-                    <Plus size={16} />
-                    New Project
-                  </button>
-                )}
-              </div>
-            ) : (
-              <div className="bg-bg-surface rounded-lg border border-border-subtle shadow-sm overflow-hidden">
-                <table className="w-full border-collapse text-left text-[12.5px]">
-                  <thead>
-                    <tr>
-                      <th className="py-2.5 px-4 text-[11px] font-semibold uppercase tracking-[0.04em] text-text-muted bg-bg-sidebar border-b border-border-subtle w-[50%]">Title</th>
-                      <th className="py-2.5 px-4 text-[11px] font-semibold uppercase tracking-[0.04em] text-text-muted bg-bg-sidebar border-b border-border-subtle w-[20%]">Owner</th>
-                      <th className="py-2.5 px-4 text-[11px] font-semibold uppercase tracking-[0.04em] text-text-muted bg-bg-sidebar border-b border-border-subtle w-[20%]">Last Modified</th>
-                      <th className="py-2.5 px-4 text-[11px] font-semibold uppercase tracking-[0.04em] text-text-muted bg-bg-sidebar border-b border-border-subtle w-[10%] text-right">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredProjects.map((project) => (
-                      <tr
-                        key={project.id}
-                        className="cursor-pointer transition-colors duration-[120ms] hover:bg-bg-subtle border-b border-border-subtle last:border-b-0"
-                        onClick={() => openProject(project)}
-                      >
-                        <td className="py-3 px-4 align-middle">
-                          <div className="flex items-center gap-3">
-                            <div className="flex items-center justify-center w-8 h-8 bg-brand-green-light text-text-brand rounded shrink-0">
-                              <FileText size={16} />
-                            </div>
-                            <span className="font-semibold text-text-primary text-[13.5px] hover:text-text-brand">{project.name}</span>
-                          </div>
-                        </td>
-                        <td className="py-3 px-4 align-middle">
-                          <span className="inline-flex items-center px-2 py-0.5 bg-bg-subtle rounded-full text-[11.5px] text-text-secondary">You</span>
-                        </td>
-                        <td className="py-3 px-4 align-middle text-text-muted text-[12.5px] tabular-nums">
-                          {formatDate(project.updated_at)}
-                        </td>
-                        <td
-                          className="py-3 px-4 align-middle text-right"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <div className="flex items-center justify-end gap-1.5">
-                            <button
-                              className="btn btn-ghost btn-icon text-text-muted hover:text-text-primary hover:bg-bg-hover active:scale-95 transition-all"
-                              onClick={() => {
-                                setRenameName(project.name);
-                                setRenameModal(project);
-                              }}
-                              title="Rename project"
-                              aria-label="Rename project"
-                            >
-                              <Edit3 size={15} />
-                            </button>
-                            <button
-                              className="btn btn-ghost btn-icon text-text-muted hover:text-error hover:bg-error-bg active:scale-95 transition-all"
-                              onClick={() => setDeleteModal(project)}
-                              title="Delete project"
-                              aria-label="Delete project"
-                            >
-                              <Trash2 size={15} />
-                            </button>
-                          </div>
-                        </td>
+              ) : displayedProjects.length === 0 ? (
+                <div className="py-10 px-5 text-center bg-bg-surface rounded-lg border border-dashed border-border-medium">
+                  <div className="w-16 h-16 mx-auto mb-3 flex items-center justify-center bg-brand-green-light text-text-brand rounded-full">
+                    <FileText size={28} />
+                  </div>
+                  <h2 className="text-[17px] font-semibold text-text-primary mb-1.5">
+                    {searchQuery ? 'No matching projects' : 'No projects yet'}
+                  </h2>
+                  <p className="text-text-muted text-[12.5px] max-w-[380px] mx-auto mb-5">
+                    {searchQuery
+                      ? 'Try searching with a different keyword.'
+                      : 'Create your first document or start with a resume template.'}
+                  </p>
+                  {!searchQuery && (
+                    <button
+                      className="btn btn-primary btn-lg"
+                      onClick={() => setShowNewProject(true)}
+                    >
+                      <Plus size={16} />
+                      New Project
+                    </button>
+                  )}
+                </div>
+              ) : (
+                <div className="bg-bg-surface rounded-lg border border-border-subtle shadow-sm overflow-hidden">
+                  <table className="w-full border-collapse text-left text-[12.5px]">
+                    <thead>
+                      <tr>
+                        <th className="py-2.5 px-4 text-[11px] font-semibold uppercase tracking-[0.04em] text-text-muted bg-bg-sidebar border-b border-border-subtle w-[50%]">Title</th>
+                        <th className="py-2.5 px-4 text-[11px] font-semibold uppercase tracking-[0.04em] text-text-muted bg-bg-sidebar border-b border-border-subtle w-[20%]">Owner</th>
+                        <th className="py-2.5 px-4 text-[11px] font-semibold uppercase tracking-[0.04em] text-text-muted bg-bg-sidebar border-b border-border-subtle w-[20%]">Last Modified</th>
+                        <th className="py-2.5 px-4 text-[11px] font-semibold uppercase tracking-[0.04em] text-text-muted bg-bg-sidebar border-b border-border-subtle w-[10%] text-right">Actions</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
+                    </thead>
+                    <tbody>
+                      {displayedProjects.map((project) => (
+                        <tr
+                          key={project.id}
+                          className="cursor-pointer transition-colors duration-[120ms] hover:bg-bg-subtle border-b border-border-subtle last:border-b-0"
+                          onClick={() => openProject(project)}
+                        >
+                          <td className="py-3 px-4 align-middle">
+                            <div className="flex items-center gap-3">
+                              <div className="flex items-center justify-center w-8 h-8 bg-brand-green-light text-text-brand rounded shrink-0">
+                                <FileText size={16} />
+                              </div>
+                              <span className="font-semibold text-text-primary text-[13.5px] hover:text-text-brand">{project.name}</span>
+                            </div>
+                          </td>
+                          <td className="py-3 px-4 align-middle">
+                            <span className="inline-flex items-center px-2 py-0.5 bg-bg-subtle rounded-full text-[11.5px] text-text-secondary">You</span>
+                          </td>
+                          <td className="py-3 px-4 align-middle text-text-muted text-[12.5px] tabular-nums">
+                            {formatDate(project.updated_at)}
+                          </td>
+                          <td
+                            className="py-3 px-4 align-middle text-right"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <div className="flex items-center justify-end gap-1.5">
+                              <button
+                                className="btn btn-ghost btn-icon text-text-muted hover:text-text-primary hover:bg-bg-hover active:scale-95 transition-all"
+                                onClick={() => {
+                                  setRenameName(project.name);
+                                  setRenameModal(project);
+                                }}
+                                title="Rename project"
+                                aria-label="Rename project"
+                              >
+                                <Edit3 size={15} />
+                              </button>
+                              <button
+                                className="btn btn-ghost btn-icon text-text-muted hover:text-error hover:bg-error-bg active:scale-95 transition-all"
+                                onClick={() => setDeleteModal(project)}
+                                title="Delete project"
+                                aria-label="Delete project"
+                              >
+                                <Trash2 size={15} />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          )}
         </main>
       </div>
 
@@ -766,19 +800,17 @@ const Dashboard: React.FC = () => {
                     return (
                       <div
                         key={tmpl.id}
-                        className={`group p-3 border-[1.5px] rounded-lg cursor-pointer text-left transition-all duration-[120ms] ${
-                          isSelected
+                        className={`group p-3 border-[1.5px] rounded-lg cursor-pointer text-left transition-all duration-[120ms] ${isSelected
                             ? 'border-brand-green bg-brand-green-light shadow-[0_0_0_2px_var(--color-brand-green)]'
                             : 'border-border-subtle bg-bg-surface hover:border-brand-green-border hover:bg-bg-sidebar'
-                        }`}
+                          }`}
                         onClick={() => setSelectedTemplate(tmpl.id)}
                       >
                         <div
-                          className={`w-8 h-8 rounded-md flex items-center justify-center mb-2.5 transition-colors ${
-                            isSelected
+                          className={`w-8 h-8 rounded-md flex items-center justify-center mb-2.5 transition-colors ${isSelected
                               ? 'bg-brand-green text-white shadow-xs'
                               : 'bg-bg-subtle text-text-secondary group-hover:bg-brand-green-light group-hover:text-text-brand'
-                          }`}
+                            }`}
                         >
                           <IconComponent size={17} strokeWidth={2} />
                         </div>
@@ -913,9 +945,6 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       )}
-
-      {/* AI Settings Modal */}
-      <AiSettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
     </div>
   );
 };
