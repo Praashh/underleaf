@@ -22,7 +22,6 @@ import EditorToolbar from '../components/Editor/EditorToolbar';
 import PdfViewer from '../components/Preview/PdfViewer';
 import { AiAssistantPanel } from '../components/AI/AiAssistantPanel';
 import { AiSettingsModal } from '../components/Settings/AiSettingsModal';
-import { ThemeToggle } from '../components/Common/ThemeToggle';
 import { useEditorStore } from '../store/editorStore';
 import { useProjectStore } from '../store/projectStore';
 import { useAISettingsStore } from '../store/aiSettingsStore';
@@ -261,8 +260,6 @@ const EditorPage: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
-          <ThemeToggle />
-
           <button
             className={`flex items-center gap-1.5 py-1.5 px-3 rounded-md text-[12px] font-medium transition-all cursor-pointer ${isAiPanelOpen
               ? 'bg-white text-[#026046] font-semibold shadow-xs'
