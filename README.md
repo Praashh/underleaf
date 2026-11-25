@@ -1,6 +1,6 @@
 # Underleaf
 
-A desktop LaTeX editor designed for resume and CV authoring, inspired by Overleaf. Runs entirely offline with an embedded TeX engine, and features an integrated multi-provider AI Copilot.
+A desktop LaTeX editor designed for resume and CV authoring. Runs entirely offline with an embedded TeX engine, and features an integrated multi-provider AI Copilot.
 
 ---
 

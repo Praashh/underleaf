@@ -8,8 +8,8 @@ import { useEditorStore } from '../../store/editorStore';
 import { useThemeStore } from '../../store/themeStore';
 import { applyEditorAction } from '../../utils/editorActions';
 
-// Overleaf LaTeX Light Highlight Style
-export const overleafHighlightStyle = HighlightStyle.define([
+// Underleaf LaTeX Light Highlight Style
+export const latexLightHighlightStyle = HighlightStyle.define([
   // % Comments in bright green
   { tag: t.comment, color: '#2e7d32', fontStyle: 'normal' },
   { tag: t.lineComment, color: '#2e7d32', fontStyle: 'normal' },
@@ -30,8 +30,8 @@ export const overleafHighlightStyle = HighlightStyle.define([
   { tag: t.content, color: '#111827' },
 ]);
 
-// Overleaf LaTeX Dark Highlight Style
-export const overleafDarkHighlightStyle = HighlightStyle.define([
+// Underleaf LaTeX Dark Highlight Style
+export const latexDarkHighlightStyle = HighlightStyle.define([
   // % Comments in vibrant emerald green
   { tag: t.comment, color: '#4ade80', fontStyle: 'normal' },
   { tag: t.lineComment, color: '#4ade80', fontStyle: 'normal' },
@@ -53,7 +53,7 @@ export const overleafDarkHighlightStyle = HighlightStyle.define([
 ]);
 
 // Editor light theme configuration
-const overleafTheme = EditorView.theme({
+const latexLightTheme = EditorView.theme({
   '&': {
     height: '100%',
     backgroundColor: '#ffffff',
@@ -93,7 +93,7 @@ const overleafTheme = EditorView.theme({
 });
 
 // Editor dark theme configuration
-const overleafDarkTheme = EditorView.theme(
+const latexDarkTheme = EditorView.theme(
   {
     '&': {
       height: '100%',
@@ -172,8 +172,8 @@ const LatexEditor: React.FC<LatexEditorProps> = ({ onViewReady }) => {
   const extensions = useMemo(() => {
     return [
       latex(),
-      isDark ? overleafDarkTheme : overleafTheme,
-      syntaxHighlighting(isDark ? overleafDarkHighlightStyle : overleafHighlightStyle),
+      isDark ? latexDarkTheme : latexLightTheme,
+      syntaxHighlighting(isDark ? latexDarkHighlightStyle : latexLightHighlightStyle),
       EditorView.lineWrapping,
       keymap.of([
         {

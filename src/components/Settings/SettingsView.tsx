@@ -238,7 +238,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 </div>
 
                 <p className="text-[12px] text-text-muted leading-relaxed">
-                  Classic crisp Overleaf-inspired paper white with British forest green.
+                  Classic crisp paper white with deep forest green accents.
                 </p>
 
                 <div className="mt-3 pt-2.5 border-t border-border-subtle/70 flex items-center justify-between text-[11px] text-text-muted">

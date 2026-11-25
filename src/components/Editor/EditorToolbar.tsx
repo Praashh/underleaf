@@ -51,7 +51,7 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ onAction }) => {
 
   return (
     <div className="flex items-center px-3 py-1.5 bg-bg-sidebar border-b border-border-subtle gap-1.5 min-h-[40px] overflow-x-auto select-none">
-      {/* Overleaf [ Code ] [ Visual ] Tabs */}
+      {/* [ Code ] [ Visual ] Tabs */}
       <div className="flex bg-bg-hover rounded-md p-0.5 gap-0.5">
         <button
           type="button"

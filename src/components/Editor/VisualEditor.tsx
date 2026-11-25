@@ -6,9 +6,9 @@ import { latex } from 'codemirror-lang-latex';
 import { useEditorStore } from '../../store/editorStore';
 import { useThemeStore } from '../../store/themeStore';
 import { applyEditorAction } from '../../utils/editorActions';
-import { overleafHighlightStyle, overleafDarkHighlightStyle } from './LatexEditor';
+import { latexLightHighlightStyle, latexDarkHighlightStyle } from './LatexEditor';
 
-// Visual Decorators for Overleaf-like rich rendering
+// Visual Decorators for rich LaTeX rendering
 const boldDecorator = new MatchDecorator({
   regexp: /\\textbf\{([^{}\r\n]+)\}/g,
   decorate(add, from, to, match) {
@@ -325,7 +325,7 @@ const VisualEditor: React.FC<VisualEditorProps> = ({ onViewReady }) => {
   const extensions = useMemo(() => {
     return [
       latex(),
-      syntaxHighlighting(isDark ? overleafDarkHighlightStyle : overleafHighlightStyle),
+      syntaxHighlighting(isDark ? latexDarkHighlightStyle : latexLightHighlightStyle),
       isDark ? visualDarkTheme : visualTheme,
       EditorView.lineWrapping,
       boldPlugin,

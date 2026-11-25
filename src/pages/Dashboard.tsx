@@ -569,7 +569,7 @@ const Dashboard: React.FC = () => {
 
       {/* Body with Sidebar and Main View */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Overleaf Sidebar */}
+        {/* Sidebar */}
         <aside className="w-60 bg-bg-surface border-r border-border-subtle flex flex-col p-4 px-3 shrink-0">
           <button
             className="btn btn-primary w-full py-2.5 px-4 text-[13.5px] font-semibold mb-5 justify-center"
